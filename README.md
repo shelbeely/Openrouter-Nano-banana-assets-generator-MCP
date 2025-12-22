@@ -1,10 +1,17 @@
-# OpenRouter Nano Banana Pro Assets Generator MCP
+# OpenRouter Nano Banana Pro Assets Generator
 
-A powerful Model Context Protocol (MCP) server that leverages OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview) for professional web asset generation and editing.
+A powerful asset generation solution that leverages OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview) for professional web asset generation and editing.
+
+Available as both a **Model Context Protocol (MCP) server** and an **Agent Skill** (agentskills.io standard).
 
 ## Overview
 
-This MCP server enables AI assistants to generate high-quality web assets, asset packs, and perform advanced image editing while maintaining brand consistency. It uses **Nano Banana Pro**, Google's most advanced image-generation and editing model built on Gemini 3 Pro.
+This project enables AI assistants to generate high-quality web assets, asset packs, and perform advanced image editing while maintaining brand consistency. It uses **Nano Banana Pro**, Google's most advanced image-generation and editing model built on Gemini 3 Pro.
+
+### Two Ways to Use
+
+1. **MCP Server** - A full Model Context Protocol server for MCP-compatible clients
+2. **Agent Skill** - A portable skill package following the [Agent Skills](https://agentskills.io) standard
 
 ### Key Features
 
@@ -16,57 +23,92 @@ This MCP server enables AI assistants to generate high-quality web assets, asset
 - 📐 **Flexible Formats**: Multiple aspect ratios (1:1, 16:9, 9:16, 21:9, etc.) and resolutions (up to 4K)
 - 🌐 **Web-Optimized**: Assets designed specifically for web development workflows
 
-## Installation
+## Quick Start
 
-```bash
-npm install
-npm run build
-```
+Choose your preferred method:
 
-## Configuration
+### Option 1: Agent Skill (Recommended for Portability)
 
-Set your OpenRouter API key as an environment variable:
+The **Agent Skill** is a lightweight, portable package that works across multiple AI platforms.
 
-```bash
-export OPENROUTER_API_KEY="your-api-key-here"
-```
+1. **Copy the skill directory**:
+   ```bash
+   cp -r nano-banana-assets-skill ~/.config/Claude/skills/
+   # Or to your preferred agent's skills directory
+   ```
 
-You can obtain an API key from [OpenRouter](https://openrouter.ai/).
+2. **Set your API key**:
+   ```bash
+   export OPENROUTER_API_KEY="your-api-key-here"
+   ```
 
-## Usage
+3. **Use with your AI agent**:
+   ```
+   "Use the nano-banana-assets skill to generate a hero banner"
+   ```
 
-### With Claude Desktop
+📖 **[Full Agent Skill Documentation →](./nano-banana-assets-skill/README.md)**
 
-Add this configuration to your Claude Desktop config file:
+### Option 2: MCP Server
 
-**MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
+The **MCP Server** provides dedicated tools for MCP-compatible clients.
 
-```json
-{
-  "mcpServers": {
-    "nano-banana-assets": {
-      "command": "node",
-      "args": ["/absolute/path/to/openrouter-nano-banana-mcp/dist/index.js"],
-      "env": {
-        "OPENROUTER_API_KEY": "your-api-key-here"
-      }
-    }
-  }
-}
-```
+1. **Install dependencies**:
+   ```bash
+   npm install
+   npm run build
+   ```
 
-### Standalone Usage
+2. **Set your API key**:
+   ```bash
+   export OPENROUTER_API_KEY="your-api-key-here"
+   ```
 
-```bash
-# Set your API key
-export OPENROUTER_API_KEY="your-api-key-here"
+3. **Configure MCP client** (e.g., Claude Desktop):
 
-# Run the server
-node dist/index.js
-```
+   **MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
+   **Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
 
-## Available Tools
+   ```json
+   {
+     "mcpServers": {
+       "nano-banana-assets": {
+         "command": "node",
+         "args": ["/absolute/path/to/openrouter-nano-banana-mcp/dist/index.js"],
+         "env": {
+           "OPENROUTER_API_KEY": "your-api-key-here"
+         }
+       }
+     }
+   }
+   ```
+
+Get your API key from [OpenRouter](https://openrouter.ai/).
+
+## Comparison: Agent Skill vs MCP Server
+
+| Feature | Agent Skill | MCP Server |
+|---------|-------------|------------|
+| **Installation** | Copy directory | npm install + build |
+| **Configuration** | Environment variable | MCP client config |
+| **Platform Support** | All Agent Skills-compatible platforms | MCP-compatible clients |
+| **Portability** | Highly portable | Requires Node.js |
+| **Usage** | Natural language | Tool calls |
+| **Maintenance** | Minimal | Standard npm package |
+
+**Use Agent Skill when:**
+- You want maximum portability
+- You're using multiple AI platforms
+- You prefer minimal setup
+
+**Use MCP Server when:**
+- You're already using MCP clients
+- You want structured tool calls
+- You prefer the MCP ecosystem
+
+Both provide the same capabilities and quality!
+
+## Available Capabilities
 
 ### 1. `generate_asset`
 
@@ -185,6 +227,7 @@ The server uses OpenRouter's image generation API with the following key feature
 
 ## Technical Details
 
+### MCP Server
 - **Model**: `google/gemini-3-pro-image-preview` via OpenRouter
 - **API Endpoint**: `https://openrouter.ai/api/v1/chat/completions`
 - **Protocol**: Model Context Protocol (MCP)
@@ -192,6 +235,14 @@ The server uses OpenRouter's image generation API with the following key feature
 - **Runtime**: Node.js with TypeScript
 - **Image Format**: Base64-encoded data URLs (PNG)
 - **Modalities**: `["image", "text"]` for image generation capabilities
+
+### Agent Skill
+- **Standard**: [Agent Skills](https://agentskills.io) specification v1.0
+- **Format**: SKILL.md with YAML frontmatter + Markdown instructions
+- **Compatibility**: All Agent Skills-compatible platforms
+- **Scripts**: Bash and Python helper scripts included
+- **Documentation**: Comprehensive references and templates
+- **Requirements**: OpenRouter API key, internet access
 
 ### API Implementation
 
@@ -224,6 +275,8 @@ Response format:
 
 ## Development
 
+### MCP Server Development
+
 ```bash
 # Install dependencies
 npm install
@@ -233,13 +286,65 @@ npm run build
 
 # Watch mode for development
 npm run watch
+
+# Test
+npm run test
+```
+
+### Agent Skill Development
+
+The Agent Skill is ready to use - no build step required! To modify:
+
+1. Edit `nano-banana-assets-skill/SKILL.md` for instructions
+2. Update scripts in `nano-banana-assets-skill/scripts/` as needed
+3. Add reference materials to `nano-banana-assets-skill/references/`
+4. Test with a compatible AI agent
+
+## Project Structure
+
+```
+.
+├── src/                           # MCP server source code
+│   └── index.ts                   # Main server implementation
+├── dist/                          # Built MCP server
+│   └── index.js                   # Compiled server
+├── nano-banana-assets-skill/      # Agent Skill (portable)
+│   ├── SKILL.md                   # Main skill definition
+│   ├── README.md                  # Skill documentation
+│   ├── scripts/                   # Helper scripts
+│   │   ├── generate_asset.sh      # Bash helper
+│   │   └── generate_asset.py      # Python helper
+│   ├── references/                # Reference docs
+│   │   ├── api-reference.md       # API documentation
+│   │   └── prompt-templates.md    # Prompt examples
+│   └── assets/                    # Example assets
+├── README.md                      # This file
+├── EXAMPLES.md                    # Usage examples
+├── CONFIG.md                      # Configuration guide
+├── QUICKSTART.md                  # Quick start guide
+└── package.json                   # npm package config
 ```
 
 ## Requirements
 
+### For MCP Server
 - Node.js 18 or higher
 - OpenRouter API key
 - MCP-compatible client (e.g., Claude Desktop)
+
+### For Agent Skill
+- OpenRouter API key
+- Agent Skills-compatible AI platform
+- Internet access
+- (Optional) Python 3.10+ for Python scripts
+
+## Documentation
+
+- **[Agent Skill Documentation](./nano-banana-assets-skill/README.md)** - Complete guide to using the Agent Skill
+- **[Quick Start Guide](./QUICKSTART.md)** - Get started quickly with MCP server
+- **[Examples](./EXAMPLES.md)** - Detailed usage examples
+- **[Configuration](./CONFIG.md)** - Configuration options
+- **[API Reference](./API.md)** - API documentation
 
 ## License
 
@@ -252,5 +357,6 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 ## Acknowledgments
 
 - Built with [Model Context Protocol SDK](https://github.com/modelcontextprotocol)
+- Follows [Agent Skills](https://agentskills.io) specification
 - Powered by [OpenRouter](https://openrouter.ai/)
 - Uses Google's Nano Banana Pro (Gemini 3 Pro Image Preview)
