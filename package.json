@@ -1,0 +1,32 @@
+{
+  "name": "openrouter-nano-banana-mcp",
+  "version": "1.0.0",
+  "description": "OpenRouter-powered MCP server using Nano Banana Pro for asset generation",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "openrouter-nano-banana-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "openrouter",
+    "nano-banana",
+    "gemini",
+    "image-generation",
+    "asset-generation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}
