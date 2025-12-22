@@ -177,6 +177,14 @@
 
 ## Tips for Best Results
 
+### Understanding Image Output
+
+- **Format**: Images are returned as base64-encoded data URLs
+- **Type**: PNG format by default
+- **Embedding**: Can be directly used in HTML `<img>` tags or saved to files
+- **MCP Response**: Images are included as separate content items in the response
+- **Multiple Images**: The model may generate multiple variations or components
+
 ### Writing Effective Prompts
 
 1. **Be Specific**: Include details about style, mood, elements, and composition

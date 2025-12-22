@@ -153,15 +153,26 @@ Check consistency of:
 
 ## Model Capabilities
 
-Nano Banana Pro offers:
+Nano Banana Pro (via OpenRouter) offers:
 
 - **Advanced Multimodal Reasoning**: Understands context from reference images, logos, and descriptions
 - **High-Fidelity Visual Synthesis**: Professional-quality outputs suitable for production
 - **Text Rendering**: Industry-leading text placement in images with multilingual support
 - **Identity Preservation**: Consistent styling across multiple assets (up to 5 subject references)
 - **Fine-Grained Controls**: Localized edits, lighting adjustments, focus control, camera transformations
-- **Flexible Output**: 2K/4K support, multiple aspect ratios, web-optimized formats
+- **Flexible Output**: Support for multiple aspect ratios (1:1, 16:9, 9:16, 21:9, etc.)
 - **Search Grounding**: Real-time information integration for context-rich graphics
+- **Base64 Image Output**: Generated images are returned as base64-encoded data URLs
+
+## How It Works
+
+The server uses OpenRouter's image generation API with the following key features:
+
+1. **Modalities**: Requests specify `["image", "text"]` to enable image generation
+2. **Image Configuration**: Aspect ratios are passed via `image_config.aspect_ratio`
+3. **Reference Images**: Input images are provided as URLs or base64 data for style guidance
+4. **Response Format**: Generated images are returned in the `message.images` array as base64 data URLs
+5. **Multiple Outputs**: The model can generate multiple variations or asset types in a single request
 
 ## Use Cases
 
@@ -175,9 +186,41 @@ Nano Banana Pro offers:
 ## Technical Details
 
 - **Model**: `google/gemini-3-pro-image-preview` via OpenRouter
+- **API Endpoint**: `https://openrouter.ai/api/v1/chat/completions`
 - **Protocol**: Model Context Protocol (MCP)
 - **Transport**: stdio
 - **Runtime**: Node.js with TypeScript
+- **Image Format**: Base64-encoded data URLs (PNG)
+- **Modalities**: `["image", "text"]` for image generation capabilities
+
+### API Implementation
+
+The server implements OpenRouter's multimodal image generation API:
+
+```typescript
+{
+  model: "google/gemini-3-pro-image-preview",
+  messages: [{ role: "user", content: [...] }],
+  modalities: ["image", "text"],
+  image_config: {
+    aspect_ratio: "16:9"  // Configurable
+  }
+}
+```
+
+Response format:
+```typescript
+{
+  choices: [{
+    message: {
+      content: "...",  // Text description
+      images: [{       // Generated images
+        image_url: { url: "data:image/png;base64,..." }
+      }]
+    }
+  }]
+}
+```
 
 ## Development
 

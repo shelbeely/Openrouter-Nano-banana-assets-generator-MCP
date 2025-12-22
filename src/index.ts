@@ -34,13 +34,23 @@ interface AssetPackParams {
   resolution?: string;
 }
 
+interface OpenRouterResponse {
+  textContent?: string;
+  images?: string[];
+  fullResponse: any;
+}
+
 // Helper function to call OpenRouter API
-async function callOpenRouter(messages: any[], imageData?: string[]): Promise<string> {
+async function callOpenRouter(
+  messages: any[], 
+  imageData?: string[], 
+  aspectRatio?: string
+): Promise<OpenRouterResponse> {
   if (!OPENROUTER_API_KEY) {
     throw new Error("OPENROUTER_API_KEY environment variable is required");
   }
 
-  // Prepare content with images if provided
+  // Prepare content with images if provided (for input/reference images)
   const userContent: any[] = [];
   
   if (imageData && imageData.length > 0) {
@@ -61,7 +71,8 @@ async function callOpenRouter(messages: any[], imageData?: string[]): Promise<st
     text: messages[0].content
   });
 
-  const requestBody = {
+  // Build request body with modalities for image generation
+  const requestBody: any = {
     model: MODEL,
     messages: [
       {
@@ -69,9 +80,17 @@ async function callOpenRouter(messages: any[], imageData?: string[]): Promise<st
         content: userContent
       }
     ],
+    modalities: ["image", "text"], // Enable image generation
     temperature: 0.7,
     max_tokens: 4096,
   };
+
+  // Add image configuration if aspect ratio specified
+  if (aspectRatio) {
+    requestBody.image_config = {
+      aspect_ratio: aspectRatio
+    };
+  }
 
   const response = await fetch(OPENROUTER_API_URL, {
     method: "POST",
@@ -90,7 +109,24 @@ async function callOpenRouter(messages: any[], imageData?: string[]): Promise<st
   }
 
   const data = await response.json() as any;
-  return data.choices[0].message.content as string;
+  const message = data.choices[0].message;
+  
+  // Extract both text content and generated images
+  const result: OpenRouterResponse = {
+    fullResponse: data
+  };
+
+  // Get text content if available
+  if (message.content) {
+    result.textContent = message.content;
+  }
+
+  // Get generated images if available (base64 data URLs)
+  if (message.images && Array.isArray(message.images)) {
+    result.images = message.images.map((img: any) => img.image_url?.url || img.url);
+  }
+
+  return result;
 }
 
 // Create server instance
@@ -321,16 +357,50 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
         const result = await callOpenRouter(
           [{ role: "user", content: prompt }],
-          imageData.length > 0 ? imageData : undefined
+          imageData.length > 0 ? imageData : undefined,
+          params.aspectRatio
         );
 
+        // Build response with both text and images
+        let responseText = `Asset Generation Complete!\n\n`;
+        
+        if (result.textContent) {
+          responseText += `${result.textContent}\n\n`;
+        }
+        
+        responseText += `Specifications:\n`;
+        responseText += `- Aspect Ratio: ${params.aspectRatio || "default (1:1)"}\n`;
+        responseText += `- Resolution: ${params.resolution || "standard"}\n`;
+        
+        if (params.colorPalette && params.colorPalette.length > 0) {
+          responseText += `- Color Palette: ${params.colorPalette.join(", ")}\n`;
+        }
+        
+        if (result.images && result.images.length > 0) {
+          responseText += `\n✅ Generated ${result.images.length} image(s)\n`;
+          responseText += `Images are provided as base64 data URLs below.\n`;
+        }
+
+        const contentItems: any[] = [
+          {
+            type: "text",
+            text: responseText
+          }
+        ];
+
+        // Add generated images to response
+        if (result.images && result.images.length > 0) {
+          for (let i = 0; i < result.images.length; i++) {
+            contentItems.push({
+              type: "image",
+              data: result.images[i],
+              mimeType: "image/png"
+            });
+          }
+        }
+
         return {
-          content: [
-            {
-              type: "text",
-              text: `Asset Generation Result:\n\n${result}\n\nThe Nano Banana Pro model has processed your request. The generated asset follows your specifications including aspect ratio (${params.aspectRatio || "default"}), resolution (${params.resolution || "standard"}), and incorporates your brand elements.\n\nNote: To retrieve the actual generated image, you'll need to process the model's response which may include image URLs or generation completion status.`
-            }
-          ]
+          content: contentItems
         };
       }
 
@@ -381,16 +451,45 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
         const result = await callOpenRouter(
           [{ role: "user", content: prompt }],
-          imageData.length > 0 ? imageData : undefined
+          imageData.length > 0 ? imageData : undefined,
+          params.aspectRatio
         );
 
+        let responseText = `Asset Pack Generation Complete!\n\n`;
+        
+        if (result.textContent) {
+          responseText += `${result.textContent}\n\n`;
+        }
+        
+        responseText += `Generated ${params.assetTypes.length} asset types with consistent branding:\n`;
+        params.assetTypes.forEach((t, i) => {
+          responseText += `${i + 1}. ${t}\n`;
+        });
+        
+        if (result.images && result.images.length > 0) {
+          responseText += `\n✅ Generated ${result.images.length} image(s)\n`;
+        }
+
+        const contentItems: any[] = [
+          {
+            type: "text",
+            text: responseText
+          }
+        ];
+
+        // Add generated images
+        if (result.images && result.images.length > 0) {
+          for (const image of result.images) {
+            contentItems.push({
+              type: "image",
+              data: image,
+              mimeType: "image/png"
+            });
+          }
+        }
+
         return {
-          content: [
-            {
-              type: "text",
-              text: `Asset Pack Generation Result:\n\n${result}\n\nGenerated ${params.assetTypes.length} asset types with consistent branding:\n${params.assetTypes.map((t, i) => `${i + 1}. ${t}`).join("\n")}\n\nAll assets follow your brand guidelines and maintain visual consistency across the pack.`
-            }
-          ]
+          content: contentItems
         };
       }
 
@@ -427,16 +526,43 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
         const result = await callOpenRouter(
           [{ role: "user", content: prompt }],
-          [params.sourceImage]
+          [params.sourceImage],
+          params.aspectRatio
         );
 
+        let responseText = `Asset Editing Complete!\n\n`;
+        
+        if (result.textContent) {
+          responseText += `${result.textContent}\n\n`;
+        }
+        
+        responseText += `Applied edits: ${params.editInstructions}\n`;
+        responseText += `Preserved elements: ${params.preserveElements?.join(", ") || "none specified"}\n`;
+        
+        if (result.images && result.images.length > 0) {
+          responseText += `\n✅ Generated ${result.images.length} edited image(s)\n`;
+        }
+
+        const contentItems: any[] = [
+          {
+            type: "text",
+            text: responseText
+          }
+        ];
+
+        // Add edited images
+        if (result.images && result.images.length > 0) {
+          for (const image of result.images) {
+            contentItems.push({
+              type: "image",
+              data: image,
+              mimeType: "image/png"
+            });
+          }
+        }
+
         return {
-          content: [
-            {
-              type: "text",
-              text: `Asset Editing Result:\n\n${result}\n\nThe image has been edited according to your instructions. Preserved elements: ${params.preserveElements?.join(", ") || "none specified"}.`
-            }
-          ]
+          content: contentItems
         };
       }
 
@@ -480,13 +606,38 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           allImages
         );
 
+        let responseText = `Brand Consistency Analysis Complete!\n\n`;
+        
+        if (result.textContent) {
+          responseText += `${result.textContent}\n\n`;
+        }
+        
+        responseText += `Analyzed ${params.assets.length} assets against your brand guidelines.\n`;
+        
+        if (result.images && result.images.length > 0) {
+          responseText += `\n✅ Generated ${result.images.length} corrected/refined image(s)\n`;
+        }
+
+        const contentItems: any[] = [
+          {
+            type: "text",
+            text: responseText
+          }
+        ];
+
+        // Add any refined images if the model generated improvements
+        if (result.images && result.images.length > 0) {
+          for (const image of result.images) {
+            contentItems.push({
+              type: "image",
+              data: image,
+              mimeType: "image/png"
+            });
+          }
+        }
+
         return {
-          content: [
-            {
-              type: "text",
-              text: `Brand Consistency Analysis:\n\n${result}\n\nAnalyzed ${params.assets.length} assets against your brand guidelines. The analysis includes consistency checks and recommendations for maintaining brand identity.`
-            }
-          ]
+          content: contentItems
         };
       }
 
