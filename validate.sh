@@ -36,10 +36,11 @@ else
 fi
 echo ""
 
-# Check file permissions
+// Check file permissions
 echo "🔒 Checking permissions..."
 if [ ! -x "dist/index.js" ]; then
     echo "   ⚠️  dist/index.js is not executable"
+    echo "   Making it executable (chmod +x dist/index.js)"
     chmod +x dist/index.js
     echo "   ✅ Made executable"
 else

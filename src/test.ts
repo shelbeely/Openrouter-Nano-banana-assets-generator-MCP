@@ -185,12 +185,13 @@ process.on('SIGINT', () => {
   process.exit(1);
 });
 
-// Wait for server to start (timeout after 10 seconds)
+// Wait for server to start (configurable timeout via SERVER_START_TIMEOUT env var)
+const startTimeout = parseInt(process.env.SERVER_START_TIMEOUT || '10', 10) * 1000;
 setTimeout(() => {
   if (testsPassed === 0 && testsFailed === 0) {
-    console.error('\n❌ Server failed to start within 10 seconds');
+    console.error(`\n❌ Server failed to start within ${startTimeout / 1000} seconds`);
     console.error('stderr output:', errorOutput);
     server.kill();
     process.exit(1);
   }
-}, 10000);
+}, startTimeout);

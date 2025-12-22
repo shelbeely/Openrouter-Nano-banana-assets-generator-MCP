@@ -40,6 +40,22 @@ interface OpenRouterResponse {
   fullResponse: any;
 }
 
+interface OpenRouterImage {
+  image_url?: { url: string };
+  url?: string;
+}
+
+interface OpenRouterMessage {
+  content?: string;
+  images?: OpenRouterImage[];
+}
+
+interface OpenRouterAPIResponse {
+  choices: Array<{
+    message: OpenRouterMessage;
+  }>;
+}
+
 // Helper function to call OpenRouter API
 async function callOpenRouter(
   messages: any[], 
@@ -108,7 +124,7 @@ async function callOpenRouter(
     throw new Error(`OpenRouter API error: ${response.status} - ${error}`);
   }
 
-  const data = await response.json() as any;
+  const data = await response.json() as OpenRouterAPIResponse;
   const message = data.choices[0].message;
   
   // Extract both text content and generated images
@@ -123,7 +139,9 @@ async function callOpenRouter(
 
   // Get generated images if available (base64 data URLs)
   if (message.images && Array.isArray(message.images)) {
-    result.images = message.images.map((img: any) => img.image_url?.url || img.url);
+    result.images = message.images.map((img: OpenRouterImage) => 
+      img.image_url?.url || img.url || ''
+    ).filter(url => url !== '');
   }
 
   return result;
