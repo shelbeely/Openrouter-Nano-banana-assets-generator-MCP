@@ -4,3 +4,22 @@ dist/
 .env
 .DS_Store
 *.tsbuildinfo
+
+# API keys and secrets
+*.key
+.env.*
+!.env.example
+
+# VS Code settings with secrets
+.vscode/settings.json
+
+# Generated assets from testing
+asset_*.png
+response.json
+*.png
+*.jpg
+*.jpeg
+
+# Demo and test directories
+agent-skill-demo/
+test-output/

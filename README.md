@@ -2,7 +2,7 @@
 
 A powerful asset generation solution that leverages OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview) for professional web asset generation and editing.
 
-Available as both a **Model Context Protocol (MCP) server** and an **Agent Skill** (agentskills.io standard).
+Available as both a **Model Context Protocol (MCP) server** and a **GitHub Copilot Agent Skill** (following the official GitHub specification).
 
 ## Overview
 
@@ -10,8 +10,8 @@ This project enables AI assistants to generate high-quality web assets, asset pa
 
 ### Two Ways to Use
 
-1. **MCP Server** - A full Model Context Protocol server for MCP-compatible clients
-2. **Agent Skill** - A portable skill package following the [Agent Skills](https://agentskills.io) standard
+1. **GitHub Copilot Agent Skill** - Official GitHub Copilot agent skill that loads automatically when you need asset generation
+2. **MCP Server** - A full Model Context Protocol server for MCP-compatible clients
 
 ### Key Features
 
@@ -27,33 +27,52 @@ This project enables AI assistants to generate high-quality web assets, asset pa
 
 Choose your preferred method:
 
-### Option 1: Agent Skill (Recommended for Portability)
+### Option 1: GitHub Copilot Agent Skill (Recommended)
 
-The **Agent Skill** is a lightweight, portable package that works across multiple AI platforms.
+The **GitHub Copilot Agent Skill** is automatically loaded by GitHub Copilot when you need asset generation.
 
-1. **Copy the skill directory**:
+1. **Set your API key** (one-time setup):
    ```bash
-   cp -r nano-banana-assets-skill ~/.config/Claude/skills/
-   # Or to your preferred agent's skills directory
+   # Run the interactive setup script
+   ./setup-api-key.sh
+   
+   # Or manually set it
+   export OPENROUTER_API_KEY="your-api-key-here"
+   ```
+   
+   📖 **[Detailed API Key Setup Guide →](./OPENROUTER_API_KEY_SETUP.md)**
+
+2. **Use with GitHub Copilot**:
+   
+   Just ask naturally in VS Code, CLI, or coding agent:
+   ```
+   "Generate a modern home icon for my website"
+   "Create a hero banner with blue and purple gradient"
+   "I need a social media kit for my brand"
+   ```
+   
+   GitHub Copilot automatically uses the skill in `.github/skills/nano-banana-assets/`!
+
+3. **Verify it works**:
+   ```bash
+   # Test the skill directly
+   cd .github/skills/nano-banana-assets/scripts
+   python generate_asset.py "Test icon" "1:1" "512x512"
    ```
 
-2. **Set your API key**:
+📖 **[Full Agent Skill Documentation →](./.github/skills/README.md)**  
+📖 **[Copilot Usage Guide →](./COPILOT_AGENT_USAGE.md)**
+
+### Option 2: MCP Server
+
+The **MCP Server** provides dedicated tools for MCP-compatible clients like Claude Desktop.
+
+1. **Set your API key**:
    ```bash
    export OPENROUTER_API_KEY="your-api-key-here"
    ```
 
-3. **Use with your AI agent**:
-   ```
-   "Use the nano-banana-assets skill to generate a hero banner"
-   ```
-
-📖 **[Full Agent Skill Documentation →](./nano-banana-assets-skill/README.md)**
-
-### Option 2: MCP Server
-
-The **MCP Server** provides dedicated tools for MCP-compatible clients.
-
-1. **Install dependencies**:
+2. **Install dependencies**:
    ```bash
    npm install
    npm run build
