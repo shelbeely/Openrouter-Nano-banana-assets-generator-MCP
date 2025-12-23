@@ -20,6 +20,11 @@ response.json
 *.jpg
 *.jpeg
 
+# Exception: Allow committed example assets
+!assets/generated/*.png
+!assets/generated/*.jpg
+!assets/generated/*.jpeg
+
 # Demo and test directories
 agent-skill-demo/
 test-output/
