@@ -432,6 +432,119 @@ Describe layout using standard terms:
 - Include brand guidelines in every prompt
 - Use the asset pack feature for related assets
 
+### Issue: Need to generate more than 5 images with consistent style
+
+**Solution**: Use the sliding window technique:
+- Generate images sequentially, not in a batch
+- For images 1-5: Use all previous images as references
+- For image 6+: Use only the last 5 images as references
+- Always include "IMPORTANT: Match the style of the reference images exactly" in your prompt
+- Store each generated image to use as reference for the next
+
+---
+
+## Consistent Series Generation (6+ Images)
+
+When generating more than 5 images that need to maintain consistency, use this approach:
+
+### Template for Each Image in Series
+
+```
+Generate image [N] of [TOTAL] for this series:
+
+Series Context: [Overall description of the series and its purpose]
+
+This Image: [Specific description for this particular image]
+
+Brand Guidelines:
+[Style, tone, and visual requirements]
+
+Color Palette: [hex codes]
+Aspect Ratio: [ratio]
+Resolution: [resolution]
+
+Consistency Requirements:
+- Maintain the same visual style as the reference images
+- Use consistent design language, color treatment, and composition
+- Ensure this image feels like part of the same cohesive series
+- Professional, web-ready quality
+- Modern and polished appearance
+
+IMPORTANT: The reference images show the previously generated images in this series. Match their style, tone, and visual identity exactly while creating this new variation.
+```
+
+### Reference Image Strategy
+
+```python
+# Pseudocode for sliding window approach
+generated_images = []
+
+for i in range(total_images):
+    references = []
+    
+    # Add logo if exists
+    if logo:
+        references.append(logo)
+    
+    # For first image only, add initial reference images
+    if i == 0 and initial_references:
+        references.extend(initial_references)
+    
+    # Add previously generated images (sliding window)
+    if generated_images:
+        # Take last 5 images (or 4 if logo takes 1 slot)
+        max_refs = 4 if logo else 5
+        start_idx = max(0, len(generated_images) - max_refs)
+        references.extend(generated_images[start_idx:])
+    
+    # Generate image with references
+    new_image = generate(prompt, references)
+    generated_images.append(new_image)
+```
+
+### Example: 10-Icon Weather Set
+
+```
+[Icon 1 - Sunny]
+Prompt: Generate icon 1 of 10 for weather icon series...
+References: [initial style guide if any]
+→ Generate and store
+
+[Icon 2 - Cloudy]
+Prompt: Generate icon 2 of 10 for weather icon series...
+       IMPORTANT: Match style of reference image exactly.
+References: [Icon 1]
+→ Generate and store
+
+[Icons 3-5]
+Same pattern, accumulating references
+Icon 3: [Icon 1, Icon 2]
+Icon 4: [Icon 1, Icon 2, Icon 3]
+Icon 5: [Icon 1, Icon 2, Icon 3, Icon 4]
+
+[Icon 6 - Windy] ← Sliding window starts
+Prompt: Generate icon 6 of 10 for weather icon series...
+       IMPORTANT: Match style of reference images exactly.
+References: [Icon 2, Icon 3, Icon 4, Icon 5]
+→ Generate and store
+
+[Icons 7-10]
+Continue sliding window:
+Icon 7: [Icon 3, Icon 4, Icon 5, Icon 6]
+Icon 8: [Icon 4, Icon 5, Icon 6, Icon 7]
+Icon 9: [Icon 5, Icon 6, Icon 7, Icon 8]
+Icon 10: [Icon 6, Icon 7, Icon 8, Icon 9]
+```
+
+### Key Success Factors
+
+1. **Sequential Generation**: Generate one at a time, not in batch
+2. **Explicit Instructions**: Always emphasize "match the style exactly"
+3. **Consistent Prompts**: Use the same structure and wording for all prompts
+4. **Reference Management**: Track which images to use as references
+5. **Style Anchoring**: Include series context in every prompt
+6. **Quality Verification**: Check each image before proceeding to next
+
 ---
 
 **Remember**: The more specific and detailed your prompt, the better the results. Don't hesitate to include technical requirements, style preferences, and exact specifications.
