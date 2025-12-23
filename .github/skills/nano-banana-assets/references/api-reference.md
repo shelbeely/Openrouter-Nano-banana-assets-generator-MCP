@@ -4,6 +4,23 @@
 
 This document provides detailed API reference for using OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview) model for asset generation.
 
+## ⚠️ Important: Transparency Limitation
+
+**The model outputs RGB PNG files without alpha transparency.** See the main SKILL.md for details on:
+- Using chroma key backgrounds (#00FF00)
+- Post-processing with rembg
+- Automated script: `../scripts/generate_with_transparency.py`
+
+## Helper Scripts
+
+The skill includes ready-to-use scripts in the `../scripts/` directory:
+
+1. **`generate_asset.py`** - Basic asset generation
+2. **`generate_asset.sh`** - Bash version
+3. **`generate_with_transparency.py`** - Automated transparent asset generation (generates with #00FF00, removes with rembg)
+
+See script documentation for usage examples.
+
 ## Base Configuration
 
 ### Endpoint

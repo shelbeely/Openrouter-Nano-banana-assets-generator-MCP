@@ -2,6 +2,21 @@
 
 This document provides tested prompt templates based on **Google's Six-Element Framework** for optimal results with Gemini/Nano Banana Pro.
 
+## ⚠️ IMPORTANT: Background Transparency
+
+**The model does NOT support true alpha transparency (RGBA).** When transparency is needed:
+
+### Use Chroma Key Backgrounds Instead
+
+Replace any "transparent background" with **"solid bright green (#00FF00) chroma key background"**:
+
+❌ **DON'T USE:** "transparent background" - creates fake checkered patterns
+✅ **DO USE:** "solid bright green (#00FF00) chroma key background"
+
+**Why:** The model paints checkered patterns when you request "transparent". Using a chroma key color (#00FF00) allows clean automated removal with tools like rembg.
+
+**Post-processing:** Use `rembg i input.png output.png` or the automated script `scripts/generate_with_transparency.py`
+
 ## Understanding the Six-Element Framework
 
 Google's research shows that structuring prompts around six core elements produces the best image generation results:
@@ -26,7 +41,7 @@ Generate a minimalist [ICON_TYPE] icon for a website using the Six-Element Frame
 Subject: [Describe the icon element - e.g., "Simple house silhouette with pitched roof"]
 Composition: Centered in frame, balanced proportions, suitable for small sizes (24-128px)
 Action: Static, stable iconic representation
-Location: Isolated on transparent background, no environmental context
+Location: Isolated on solid bright green (#00FF00) chroma key background, no environmental context
 Style: Minimalist line art, modern flat design, clean geometric shapes
 Lighting: Even lighting, no shadows, optimized for UI usage
 
@@ -36,7 +51,10 @@ Technical Specifications:
 Colors: [COLOR_PALETTE] - typically single color or minimal palette
 Aspect Ratio: 1:1 (square)
 Resolution: 512x512 (or as specified)
-Background: Transparent preferred
+Background: Solid bright green (#00FF00) for chroma key removal
+
+Post-Processing:
+Use rembg or ImageMagick to remove green background for transparency
 
 Requirements:
 - Professional and instantly recognizable

@@ -76,6 +76,36 @@ When users need transparency, use a **bright chroma key color** that can be easi
 - ✅ Chroma key removal is cleaner than edge detection
 - ✅ Works perfectly with standard video/photo editing workflows
 
+**Automated Script Available:**
+
+For fully automated transparent asset generation, use the provided helper script:
+
+```bash
+# Located in: scripts/generate_with_transparency.py
+cd .github/skills/nano-banana-assets/scripts
+python generate_with_transparency.py "Your prompt here" "1:1" "1024x1024"
+```
+
+**This script automatically:**
+1. ✅ Generates with #00FF00 chroma key background (no fake checkered patterns)
+2. ✅ Removes background using rembg (AI-powered)
+3. ✅ Outputs transparent RGBA PNG files
+4. ✅ Saves both transparent and original versions
+
+**Example:**
+```bash
+python generate_with_transparency.py "Kawaii raccoon sticker waving" "1:1" "1024x1024"
+# Output: asset_1_transparent.png (with alpha transparency)
+#         asset_1_original_green.png (with green background for reference)
+```
+
+**Requirements:**
+```bash
+pip install rembg requests
+```
+
+If rembg is not installed, the script will save with green background and provide manual removal instructions.
+
 **Post-Processing Background Removal:**
 
 **Recommended: Using rembg (AI-powered removal)**
