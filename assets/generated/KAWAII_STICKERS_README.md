@@ -4,6 +4,19 @@
 
 This is a kawaii-style sticker pack featuring adorable raccoon and ferret characters in various cute poses and outfits. Generated using the nano-banana-assets agent skill with OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview).
 
+## ⚠️ Important Note: Background Transparency
+
+**These images do NOT have true transparent backgrounds.** This is a known limitation of the Gemini image generation model.
+
+- **Format:** RGB PNG (without alpha channel)
+- **Actual Background:** Painted white/checkered pattern (not true transparency)
+- **File Type:** Color type 2 (RGB), not color type 6 (RGBA)
+
+**To use these as stickers with transparent backgrounds:**
+1. Apply background removal in post-processing
+2. Use tools like Photoshop, GIMP, remove.bg, or CLI tools
+3. Example: `convert input.png -fuzz 10% -transparent white output.png`
+
 ## Art Style Specifications
 
 All stickers follow a consistent, cohesive art style:
@@ -18,7 +31,7 @@ All stickers follow a consistent, cohesive art style:
 - ✅ **Soft, even lighting** with minimal shading
 - ✅ **No texture or gradients** (flat colors only)
 - ✅ **Polished, vector-like finish** suitable for digital stickers
-- ✅ **Fully transparent background**
+- ❌ **Background:** RGB format with painted background (requires post-processing for transparency)
 - ✅ **No text, no drop shadows, no borders**
 
 ## Sticker Collection (9/10 Generated)
@@ -158,9 +171,48 @@ These stickers are perfect for:
 
 - All stickers maintain consistent visual identity throughout the pack
 - The sliding window technique successfully preserved style across all 9 generated stickers
-- Transparent backgrounds make these ready for immediate use in various applications
+- **Backgrounds are RGB (not RGBA)** - The model generated painted backgrounds, not true transparency
+- Post-processing required for transparent backgrounds (use background removal tools)
 - Each character has a distinct personality expressed through pose and accessories
 - The art style is cohesive and professional, suitable for commercial use
+
+## Known Limitation: Fake Transparency
+
+**Issue Identified:** The generated images appear to have transparent backgrounds when viewed with a checkered pattern, but they are actually RGB PNG files with painted backgrounds.
+
+**Technical Details:**
+- File format: PNG color type 2 (RGB), not type 6 (RGBA)
+- No alpha channel present
+- Background is painted white/checkered pattern, not transparent pixels
+
+**This is a model limitation** - Gemini 3 Pro Image Preview (Nano Banana Pro) does not support generating true RGBA images with alpha transparency. The model interprets "transparent background" requests as instructions to paint a white or checkered background.
+
+**Solution:**
+To convert these to true stickers with transparency, you need to:
+
+1. **Use online tools:**
+   - remove.bg
+   - Adobe Express Background Remover
+   - Canva Background Remover
+
+2. **Use desktop software:**
+   - Photoshop (Magic Wand + Delete)
+   - GIMP (Select by Color + Delete)
+   - Affinity Photo
+
+3. **Use command-line tools:**
+   ```bash
+   # Using ImageMagick
+   convert kawaii_sticker_01_raccoon_waving.png -fuzz 10% -transparent white output.png
+   
+   # Batch process all stickers
+   for file in kawaii_sticker_*.png; do
+     convert "$file" -fuzz 10% -transparent white "transparent_$file"
+   done
+   ```
+
+**Future Recommendation:**
+When using the nano-banana-assets skill, specify solid background colors (e.g., "white background", "light gray background") instead of requesting transparent backgrounds. This sets correct expectations and prevents confusion.
 
 ---
 

@@ -35,6 +35,53 @@ Nano Banana Pro is Google's most advanced image-generation and editing model, bu
 - **Identity Subjects**: The model can maintain consistency for up to 5 different characters/subjects within those references
 - **Series Generation**: For generating series of many images (10+, 20+, 50+), use the **sliding window technique** (detailed in section 5 below) to maintain visual consistency across the entire collection by using the most recent 5-14 generated images as references for each new image.
 
+## Known Limitations
+
+### ⚠️ Transparent Backgrounds Not Supported
+
+**IMPORTANT:** Nano Banana Pro (Google Gemini 3 Pro Image Preview) **does not generate images with true alpha transparency**. This is a model limitation, not a configuration issue.
+
+**What Actually Happens:**
+- Generated images are RGB PNG files (color type 2) without alpha channels
+- When you request "transparent background," the model paints a solid color or pattern
+- The background may appear white, gray, or have a checkered pattern painted as pixels
+- The resulting PNG files cannot be overlaid on other backgrounds with transparency
+
+**Implications for Agents:**
+- ❌ **Do NOT promise users transparent backgrounds** or alpha channel support
+- ❌ **Do NOT include "transparent background" in prompts** - it will be misinterpreted
+- ✅ **DO specify a solid background color** instead (e.g., "white background", "solid light gray background")
+- ✅ **DO inform users** that post-processing is needed for true transparency
+
+**Alternative Approaches:**
+
+1. **Request Solid Backgrounds:**
+   ```
+   - "Clean white background"
+   - "Solid light gray background (#F5F5F5)"
+   - "Pure black background for dark mode"
+   ```
+
+2. **Post-Processing for Transparency (User's Responsibility):**
+   - Use image editing tools (Photoshop, GIMP, remove.bg, etc.)
+   - Apply background removal algorithms
+   - Convert RGB to RGBA and set alpha channel
+   - Example CLI tool: `convert input.png -fuzz 10% -transparent white output.png`
+
+3. **Design for Solid Backgrounds:**
+   - For stickers/icons, use solid color backgrounds matching the intended use case
+   - For web assets, design with the target background color in mind
+   - Use drop shadows or borders to separate subject from background
+
+**What to Tell Users:**
+```
+Note: Generated images have solid backgrounds (RGB PNG format). 
+The model cannot create true transparent backgrounds (RGBA). 
+If you need transparency, you'll need to:
+1. Use background removal tools post-generation, or
+2. Specify a solid background color that matches your use case
+```
+
 ## Core Capabilities
 
 1. **Generate Single Assets**: Create icons, banners, backgrounds, UI elements, and more
@@ -512,7 +559,7 @@ Step 1: Generate Icon 1 (Sunny)
 ---
 Prompt: "Generate icon 1 of 20 for this series:
 
-Series Context: Weather icon set with minimalist design. Clean lines, modern style, consistent 2px stroke weight, rounded line caps, monochrome design (#2D3748) on transparent background.
+Series Context: Weather icon set with minimalist design. Clean lines, modern style, consistent 2px stroke weight, rounded line caps, monochrome design (#2D3748) on white background.
 
 This Image: Sunny weather - sun with rays
 
@@ -1004,15 +1051,17 @@ API Request:
 Subject: Simple house silhouette with pitched roof and centered door, clean geometric shape
 Composition: Centered in frame, balanced proportions, suitable for small sizes
 Action: Static, stable presentation representing home/safety
-Location: Isolated on transparent background, no environmental context
+Location: Isolated on clean white background, no environmental context
 Style: Minimalist line art, modern flat design, professional and recognizable
 Lighting: Even lighting, no shadows, clean silhouette optimized for UI
 
 Technical Specifications:
 - Aspect Ratio: 1:1
 - Resolution: 512x512
-- Color: Single color (#2D3748) on transparent background
+- Color: Single color (#2D3748) on white background
 - Format: Clean vector-style appearance
+
+Note: For transparency, apply background removal in post-processing
 
 Requirements:
 - Professional and instantly recognizable
@@ -1149,11 +1198,12 @@ Series Overview (applies to all icons):
 - Subject: Weather symbols in minimalist line art style
 - Composition: Centered, balanced, circular-safe design
 - Action: Static, iconic representation
-- Location: Isolated on transparent background
+- Location: Isolated on clean white background
 - Style: Modern minimalist, clean line art, 2px stroke weight, rounded line caps
 - Lighting: Even, no shadows, optimized for UI usage
 - Color: Monochrome #2D3748
 - Technical: 1:1 aspect ratio, 512x512 resolution
+- Note: Apply background removal in post-processing if transparency needed
 
 [Icon 1 - Sunny]
 API Request using Six-Element Framework:
@@ -1161,11 +1211,11 @@ API Request using Six-Element Framework:
 Subject: Sun symbol - circular center with evenly spaced rays (8 rays radiating outward)
 Composition: Perfectly centered, balanced radial symmetry
 Action: Static, stable representation of sunshine
-Location: Isolated on transparent background, no context
+Location: Isolated on clean white background, no context
 Style: Minimalist line art, 2px stroke weight, rounded line caps, modern and clean
 Lighting: Even illumination, no shadows, pure line work
 
-Technical: 1:1, 512x512, #2D3748 on transparent
+Technical: 1:1, 512x512, #2D3748 on white background
 This is icon 1 of 10 in weather icon series - establishing baseline style
 
 References: None (establishing baseline)
@@ -1177,7 +1227,7 @@ API Request:
 Subject: Cloud shape - rounded, fluffy cloud form with smooth curves
 Composition: Centered, following same centered approach as icon 1
 Action: Static cloud representation
-Location: Isolated on transparent, matching icon 1 treatment
+Location: Isolated on white background, matching icon 1 treatment
 Style: Match icon 1's minimalist line art exactly, same 2px stroke, rounded caps
 Lighting: Even, matching icon 1's treatment
 
@@ -1216,7 +1266,7 @@ API Request:
 Subject: Wind lines showing air movement, curved flowing lines
 Composition: Centered following established pattern
 Action: Suggests movement while remaining iconic
-Location: Isolated on transparent, consistent with series
+Location: Isolated on white background, consistent with series
 Style: Match established minimalist line art, 2px stroke, rounded caps
 Lighting: Even, no shadows
 
