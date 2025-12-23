@@ -14,6 +14,7 @@ Agent Skills are a standardized way to package instructions, scripts, and resour
 - Create cohesive asset packs with consistent branding
 - Edit existing images with fine-grained controls
 - Ensure brand consistency across multiple assets
+- **Generate consistent series of 6+ images** using sliding window technique to maintain style beyond the 5-image reference limit
 
 ## Skill Structure
 
@@ -172,6 +173,14 @@ generator.save_images_from_response(response, "my-asset")
 - Identify inconsistencies
 - Suggest improvements
 - Generate corrected versions
+
+### 5. Consistent Series (6+ Images)
+- Generate large icon sets (10+, 20+, 50+ icons)
+- Create storyboards with many frames
+- Produce social media calendars (30+ posts)
+- Maintain consistency using sliding window technique
+- Automatically uses last 5 images as style references
+- Perfect for extensive brand asset collections
 
 ## Supported Formats
 
