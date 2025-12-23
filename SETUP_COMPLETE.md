@@ -56,7 +56,7 @@ See **[SECRET_SETUP_GUIDE.md](./SECRET_SETUP_GUIDE.md)** for step-by-step instru
 
 ## 📋 How to Use
 
-Once your secret is added, simply ask GitHub Copilot naturally:
+Once your secret is added to the copilot environment, simply ask GitHub Copilot naturally:
 
 ```
 "Generate a modern home icon for my website"
@@ -66,21 +66,19 @@ Once your secret is added, simply ask GitHub Copilot naturally:
 ```
 
 GitHub Copilot will:
-1. ✅ Run the setup workflow
-2. ✅ Load your `OPENROUTER_API_KEY` from the secret
-3. ✅ Use the nano-banana-assets skill
-4. ✅ Generate professional assets for you!
+1. ✅ Load your `OPENROUTER_API_KEY` from the copilot environment
+2. ✅ Use the nano-banana-assets skill
+3. ✅ Generate professional assets for you!
 
 ## 📖 Documentation Quick Links
 
 | Document | Purpose |
 |----------|---------|
-| [SECRET_SETUP_GUIDE.md](./SECRET_SETUP_GUIDE.md) | **START HERE** - Add your API key secret |
+| [SECRET_SETUP_GUIDE.md](./SECRET_SETUP_GUIDE.md) | **START HERE** - Add your API key to copilot environment |
 | [GITHUB_COPILOT_ENV_SETUP.md](./GITHUB_COPILOT_ENV_SETUP.md) | Copilot environment configuration |
 | [OPENROUTER_API_KEY_SETUP.md](./OPENROUTER_API_KEY_SETUP.md) | Local development setup |
 | [.github/skills/README.md](./.github/skills/README.md) | Agent skills overview |
 | [COPILOT_AGENT_USAGE.md](./COPILOT_AGENT_USAGE.md) | How agents use the skill |
-| [.github/workflows/README.md](./.github/workflows/README.md) | Workflow documentation |
 
 ## 🎯 Quick Verification
 

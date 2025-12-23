@@ -1,6 +1,6 @@
-# Quick Setup: Add Your OpenRouter API Key as a GitHub Secret
+# Quick Setup: Add Your OpenRouter API Key to Copilot Environment
 
-This is a quick visual guide for adding your OpenRouter API key as a repository secret for GitHub Copilot coding agent.
+This is a quick visual guide for adding your OpenRouter API key as a secret in the copilot environment for GitHub Copilot coding agent.
 
 ## Steps
 
@@ -12,7 +12,7 @@ This is a quick visual guide for adding your OpenRouter API key as a repository 
 → Create a new API key  
 → Copy the key (starts with `sk-or-v1-`)
 
-### 2. Add as Repository Secret
+### 2. Add to Copilot Environment
 
 #### Navigate to Settings
 
@@ -20,16 +20,28 @@ This is a quick visual guide for adding your OpenRouter API key as a repository 
 Your Repository → Settings (top menu bar)
 ```
 
-#### Go to Secrets
+#### Go to Environments
 
 ```
-Left sidebar → Secrets and variables → Actions
+Left sidebar → Environments
 ```
 
-#### Add New Secret
+#### Select or Create Copilot Environment
 
 ```
-Click: "New repository secret"
+Click: "copilot" environment
+
+If it doesn't exist:
+  Click: "New environment"
+  Name: copilot
+  Click: "Configure environment"
+```
+
+#### Add Secret
+
+```
+Under "Environment secrets" section:
+  Click: "Add environment secret"
 
 Name:   OPENROUTER_API_KEY
 Secret: [paste your sk-or-v1-... key here]
@@ -37,22 +49,7 @@ Secret: [paste your sk-or-v1-... key here]
 Click: "Add secret"
 ```
 
-### 3. Verify Setup
-
-The secret is now available to GitHub Copilot coding agent!
-
-Check the workflow:
-```
-Repository → Actions → Copilot Setup Steps → Run workflow
-```
-
-Look for in the output:
-```
-✅ OpenRouter API key set from repository secret
-✅ OPENROUTER_API_KEY is set
-```
-
-### 4. Use with GitHub Copilot
+### 3. Use with GitHub Copilot
 
 Now just ask Copilot naturally:
 ```
@@ -62,10 +59,9 @@ Now just ask Copilot naturally:
 ```
 
 Copilot will automatically:
-1. Run the setup workflow
-2. Load `OPENROUTER_API_KEY` from your secret
-3. Use the nano-banana-assets skill
-4. Generate your assets!
+1. Load `OPENROUTER_API_KEY` from the copilot environment
+2. Use the nano-banana-assets skill
+3. Generate your assets!
 
 ## Visual Flow
 
@@ -105,24 +101,25 @@ Copilot will automatically:
 ## Important Notes
 
 ✅ **DO:**
-- Use repository secrets for the API key
+- Use copilot environment secrets for the API key
+- Name the environment exactly: `copilot` (lowercase)
 - Name the secret exactly: `OPENROUTER_API_KEY`
 - Keep your API key confidential
 - Monitor usage at openrouter.ai dashboard
 
 ❌ **DON'T:**
 - Don't commit API keys to code
-- Don't hardcode keys in workflows
+- Don't use regular repository secrets (use copilot environment)
 - Don't share secrets publicly
 
 ## Troubleshooting
 
 ### Secret not working?
 
-1. **Check the name**: Must be exactly `OPENROUTER_API_KEY` (case-sensitive)
-2. **Check the workflow**: Must be on default branch (main/master)
-3. **Check Actions tab**: See if workflow ran successfully
-4. **Check workflow output**: Look for "✅ OpenRouter API key set"
+1. **Check the environment name**: Must be exactly `copilot` (lowercase)
+2. **Check the secret name**: Must be exactly `OPENROUTER_API_KEY` (case-sensitive)
+3. **Check location**: Settings → Environments → copilot → Environment secrets
+4. **Try a new Copilot session**: Environment loads at session start
 
 ### Still having issues?
 
@@ -130,24 +127,8 @@ See detailed guides:
 - [GitHub Copilot Environment Setup](./GITHUB_COPILOT_ENV_SETUP.md)
 - [OpenRouter API Key Setup](./OPENROUTER_API_KEY_SETUP.md)
 
-## CLI Alternative
-
-If you prefer using GitHub CLI:
-
-```bash
-# Add the secret
-gh secret set OPENROUTER_API_KEY
-
-# When prompted, paste your API key
-# Or provide directly:
-gh secret set OPENROUTER_API_KEY --body "sk-or-v1-your-key-here"
-
-# Verify
-gh secret list
-```
-
 ## That's It!
 
-Once the secret is added, GitHub Copilot coding agent can use the nano-banana-assets skill to generate professional web assets for you automatically.
+Once the secret is added to the copilot environment, GitHub Copilot coding agent can use the nano-banana-assets skill to generate professional web assets for you automatically.
 
 Just ask naturally and Copilot handles the rest! 🚀

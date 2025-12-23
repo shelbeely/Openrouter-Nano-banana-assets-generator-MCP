@@ -43,11 +43,11 @@ The **GitHub Copilot Agent Skill** is automatically loaded by GitHub Copilot whe
 
 #### For GitHub Copilot Coding Agent
 
-1. **Add your API key as a repository secret**:
-   - Go to: **Settings** → **Secrets and variables** → **Actions**
-   - Click **New repository secret**
+1. **Add your API key to the copilot environment**:
+   - Go to: **Settings** → **Environments** → **copilot**
+   - Under "Environment secrets," click **Add environment secret**
    - Name: `OPENROUTER_API_KEY`
-   - Value: Your OpenRouter API key from [openrouter.ai](https://openrouter.ai/)
+   - Secret: Your OpenRouter API key from [openrouter.ai](https://openrouter.ai/)
    
    📖 **[GitHub Copilot Environment Setup →](./GITHUB_COPILOT_ENV_SETUP.md)**
 
@@ -61,8 +61,7 @@ The **GitHub Copilot Agent Skill** is automatically loaded by GitHub Copilot whe
    ```
    
    Copilot automatically:
-   - Runs `.github/workflows/copilot-setup-steps.yml`
-   - Loads your API key from secrets
+   - Loads your API key from the copilot environment
    - Uses the skill in `.github/skills/nano-banana-assets/`
    - Generates your assets!
 

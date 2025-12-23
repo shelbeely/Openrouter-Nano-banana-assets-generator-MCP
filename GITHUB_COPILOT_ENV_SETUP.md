@@ -4,11 +4,11 @@ This guide explains how to configure the `OPENROUTER_API_KEY` environment variab
 
 ## Overview
 
-GitHub Copilot coding agent runs in an **ephemeral GitHub Actions environment**. To provide your OpenRouter API key securely, you need to:
+GitHub Copilot coding agent can access environment variables through the **copilot environment** in your repository settings. To provide your OpenRouter API key securely:
 
-1. Add the API key as a **repository secret**
-2. Use the **`.github/workflows/copilot-setup-steps.yml`** workflow to inject it into the environment
-3. The workflow runs automatically before Copilot starts working
+1. Create a secret in the **copilot environment**
+2. GitHub Copilot automatically loads it when working in your repository
+3. The skill scripts can access the environment variable
 
 ## Step-by-Step Setup
 
@@ -20,104 +20,64 @@ GitHub Copilot coding agent runs in an **ephemeral GitHub Actions environment**.
 4. Create a new API key
 5. Copy the key (starts with `sk-or-v1-`)
 
-### 2. Add API Key to Repository Secrets
+### 2. Add API Key to Copilot Environment
 
 #### On GitHub.com
 
-1. Go to your repository on GitHub
-2. Click **Settings** (top menu)
-3. In the left sidebar, click **Secrets and variables** → **Actions**
-4. Click **New repository secret**
-5. Set:
+1. Navigate to the main page of your repository on GitHub
+2. Click **Settings** (top menu bar)
+   - If you cannot see the "Settings" tab, select the dropdown menu, then click Settings
+3. In the left sidebar, click **Environments**
+4. Click the **copilot** environment
+   - If it doesn't exist, create it by clicking **New environment** and name it `copilot`
+5. Under "Environment secrets," click **Add environment secret**
+6. Set:
    - **Name:** `OPENROUTER_API_KEY`
-   - **Secret:** Your OpenRouter API key (paste the full key)
-6. Click **Add secret**
+   - **Secret:** Your OpenRouter API key (paste the full key starting with `sk-or-v1-`)
+7. Click **Add secret**
 
-#### Via GitHub CLI
+**Alternative: Use Environment Variable Instead of Secret**
 
-```bash
-# Set the secret using gh CLI
-gh secret set OPENROUTER_API_KEY --body "sk-or-v1-your-key-here"
+If your API key is not sensitive (e.g., for testing), you can add it as a variable:
+1. Under "Environment variables," click **Add environment variable**
+2. Set:
+   - **Name:** `OPENROUTER_API_KEY`
+   - **Value:** Your OpenRouter API key
+3. Click **Add variable**
 
-# Verify it was added
-gh secret list
-```
+**Note:** For production use, always use **Environment secrets** for API keys.
 
-### 3. Verify the Workflow File Exists
-
-The repository includes `.github/workflows/copilot-setup-steps.yml` which:
-- Sets up Node.js and Python
-- Installs dependencies
-- Makes scripts executable
-- **Injects `OPENROUTER_API_KEY` from secrets into the environment**
-
-Check it's in place:
-
-```bash
-cat .github/workflows/copilot-setup-steps.yml
-```
-
-### 4. Test the Setup
-
-Trigger the workflow manually to verify it works:
-
-1. Go to **Actions** tab in your repository
-2. Click **Copilot Setup Steps** workflow
-3. Click **Run workflow**
-4. Check the workflow output for:
-   - ✅ OpenRouter API key set from repository secret
-   - ✅ OPENROUTER_API_KEY is set
-
-### 5. Use with GitHub Copilot
+### 3. Use with GitHub Copilot
 
 Now when you use GitHub Copilot coding agent:
 
-1. Open a PR or work in the repository
+1. Open your repository or work on a PR
 2. Ask Copilot for asset generation:
    ```
    "Generate a modern icon for my website"
    "Create a hero banner with gradient background"
    ```
 3. Copilot automatically:
-   - Runs the setup workflow
-   - Loads the OPENROUTER_API_KEY from secrets
+   - Loads the OPENROUTER_API_KEY from the copilot environment
    - Uses the nano-banana-assets skill
    - Generates the assets!
 
 ## How It Works
 
-### The Workflow File
+### The Copilot Environment
 
-The key section of `.github/workflows/copilot-setup-steps.yml`:
+When you set a secret or variable in the **copilot environment**:
 
-```yaml
-jobs:
-  copilot-setup-steps:  # MUST be named exactly this
-    runs-on: ubuntu-latest
-    steps:
-      # ... other setup steps ...
-      
-      - name: Set OpenRouter API Key
-        run: |
-          if [ -n "${{ secrets.OPENROUTER_API_KEY }}" ]; then
-            echo "OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}" >> $GITHUB_ENV
-            echo "✅ OpenRouter API key set from repository secret"
-          else
-            echo "⚠️  OPENROUTER_API_KEY not found in repository secrets"
-          fi
-```
-
-**Important:** 
-- The job MUST be named `copilot-setup-steps` for Copilot to use it
-- It runs on the default branch before Copilot starts
-- Environment variables are set with `>> $GITHUB_ENV`
-
-### How Copilot Accesses the Variable
-
-1. **Workflow runs first** - When Copilot starts, it runs this workflow
-2. **Variable is set** - `OPENROUTER_API_KEY` is injected into `$GITHUB_ENV`
+1. **GitHub Copilot accesses the environment** - When Copilot coding agent starts working in your repository
+2. **Environment variables are loaded** - `OPENROUTER_API_KEY` is available in the execution environment
 3. **Skill scripts access it** - Python/Bash scripts read it with `os.getenv()` or `$OPENROUTER_API_KEY`
-4. **API calls work** - The skill can now make authenticated requests to OpenRouter
+4. **API calls work** - The skill can make authenticated requests to OpenRouter
+
+**Key Points:**
+- Environment name MUST be `copilot` (lowercase)
+- Secrets are more secure than variables for API keys
+- Changes take effect immediately for new Copilot sessions
+- No workflow file needed - GitHub handles it automatically
 
 ## Alternative Setups
 
@@ -171,86 +131,72 @@ Create `.vscode/settings.json`:
 
 ### Secret Not Found
 
-**Symptom:** Workflow shows "⚠️ OPENROUTER_API_KEY not found in repository secrets"
+**Symptom:** Skill reports "OPENROUTER_API_KEY not found in environment"
 
 **Solution:**
-1. Verify secret is added in repository settings
-2. Check the name is exactly `OPENROUTER_API_KEY` (case-sensitive)
-3. Ensure the workflow has permission to access secrets
-4. Try deleting and re-adding the secret
+1. Verify environment name is exactly `copilot` (lowercase)
+2. Check the secret is added: Settings → Environments → copilot → Environment secrets
+3. Ensure the secret name is exactly `OPENROUTER_API_KEY` (case-sensitive)
+4. Try removing and re-adding the secret
+5. Start a new Copilot session (environment loads at session start)
 
-### Workflow Not Running
+### Environment Not Visible
 
-**Symptom:** Copilot doesn't seem to use the environment
+**Symptom:** Can't find "Environments" in repository settings
 
 **Solution:**
-1. Check the workflow file is on the **default branch** (main/master)
-2. Verify the job is named exactly `copilot-setup-steps`
-3. Look at Actions tab to see if workflow ran
-4. Check for workflow syntax errors
+1. Make sure you're in repository Settings (not organization or user settings)
+2. Look in the left sidebar for "Environments"
+3. If missing, create a new environment named `copilot`
+4. Ensure you have admin permissions on the repository
 
 ### API Key Not Accessible in Scripts
 
 **Symptom:** Scripts report "OPENROUTER_API_KEY not found"
 
 **Solution:**
-1. Verify the workflow ran successfully
-2. Check the workflow output for "✅ OpenRouter API key set"
-3. Ensure scripts are reading from environment:
+1. Verify the copilot environment secret is set correctly
+2. Ensure scripts are reading from environment:
    ```python
    import os
    api_key = os.getenv("OPENROUTER_API_KEY")
    ```
-4. Make sure `>> $GITHUB_ENV` is used, not `export` alone
-
-### Permission Errors
-
-**Symptom:** "Permission denied" when running scripts
-
-**Solution:**
-The workflow includes a step to make scripts executable:
-```yaml
-- name: Make scripts executable
-  run: |
-    chmod +x .github/skills/nano-banana-assets/scripts/*.sh
-    chmod +x .github/skills/nano-banana-assets/scripts/*.py
-```
-
-If still having issues, check the repository file permissions.
+3. Start a fresh Copilot session
+4. Check if the secret value is correct (no extra spaces)
 
 ## Security Best Practices
 
 ### ✅ DO:
-- **Use repository secrets** for API keys
+- **Use copilot environment secrets** for API keys
 - **Never commit secrets** to the repository
 - **Add `.env` to `.gitignore`**
-- **Use organization secrets** for shared access
 - **Rotate keys periodically**
 - **Monitor usage** at OpenRouter dashboard
 - **Limit repository access** to trusted collaborators
 
 ### ❌ DON'T:
-- **Never hardcode API keys** in workflow files
+- **Never hardcode API keys** in code files
 - **Never commit `.env` files** with real keys
 - **Don't use production keys** for testing
 - **Don't share secrets** in issues or PRs
-- **Don't log the full API key** in workflow output
 - **Don't commit `.vscode/settings.json`** with secrets
 
 ## Verification Checklist
 
 - [ ] OpenRouter API key obtained from openrouter.ai
-- [ ] Secret added to repository: `OPENROUTER_API_KEY`
-- [ ] Workflow file exists: `.github/workflows/copilot-setup-steps.yml`
-- [ ] Workflow job named exactly: `copilot-setup-steps`
-- [ ] Workflow tested via Actions tab
-- [ ] Workflow output shows: "✅ OpenRouter API key set"
-- [ ] Scripts are executable (chmod +x applied)
+- [ ] Copilot environment created in repository settings
+- [ ] Secret added: Settings → Environments → copilot → Environment secrets
+- [ ] Secret name is exactly: `OPENROUTER_API_KEY`
 - [ ] Tested with GitHub Copilot coding agent
 
 ## Quick Reference
 
-### Add Secret via GitHub UI
+### Add Secret to Copilot Environment
+```
+Repository → Settings → Environments → copilot
+→ Environment secrets → Add environment secret
+Name: OPENROUTER_API_KEY
+Secret: sk-or-v1-your-key-here
 ```
 Repository → Settings → Secrets and variables → Actions → New repository secret
 Name: OPENROUTER_API_KEY
@@ -261,23 +207,13 @@ Secret: sk-or-v1-your-key-here
 ```bash
 gh secret set OPENROUTER_API_KEY --body "sk-or-v1-your-key-here"
 ```
-
-### Test Workflow
-```
-Repository → Actions → Copilot Setup Steps → Run workflow
-```
-
-### Verify in Workflow Output
-```
-✅ OpenRouter API key set from repository secret
-✅ OPENROUTER_API_KEY is set
-   (First 20 chars: sk-or-v1-xxxxxxxxxx...)
-```
+### Use with Copilot
+Just ask Copilot for asset generation - it will automatically use the secret!
 
 ## Additional Resources
 
 - [GitHub Docs: Customizing the agent environment](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment)
-- [GitHub Docs: Using secrets in GitHub Actions](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions)
+- [GitHub Docs: Using environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment)
 - [OpenRouter Documentation](https://openrouter.ai/docs)
 - [Local Setup Guide](./OPENROUTER_API_KEY_SETUP.md)
 - [Agent Skills Documentation](./.github/skills/README.md)
@@ -286,9 +222,8 @@ Repository → Actions → Copilot Setup Steps → Run workflow
 
 To provide your OpenRouter API key to GitHub Copilot coding agent:
 
-1. ✅ Add `OPENROUTER_API_KEY` as a repository secret
-2. ✅ Ensure `.github/workflows/copilot-setup-steps.yml` exists
-3. ✅ Verify the workflow runs successfully
-4. ✅ Use GitHub Copilot naturally - it will automatically access the key!
+1. ✅ Navigate to **Settings** → **Environments** → **copilot**
+2. ✅ Add `OPENROUTER_API_KEY` as an environment secret
+3. ✅ Use GitHub Copilot naturally - it will automatically access the key!
 
-The workflow injects the secret into Copilot's environment, allowing the nano-banana-assets skill to authenticate with OpenRouter and generate your assets.
+The copilot environment provides the secret to Copilot's execution environment, allowing the nano-banana-assets skill to authenticate with OpenRouter and generate your assets.
