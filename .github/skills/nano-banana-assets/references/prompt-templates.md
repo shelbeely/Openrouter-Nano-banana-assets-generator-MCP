@@ -1,65 +1,107 @@
 # Prompt Templates and Examples
 
-This document provides tested prompt templates for various asset generation scenarios.
+This document provides tested prompt templates based on **Google's Six-Element Framework** for optimal results with Gemini/Nano Banana Pro.
+
+## Understanding the Six-Element Framework
+
+Google's research shows that structuring prompts around six core elements produces the best image generation results:
+
+1. **Subject** - Who/what is in the image
+2. **Composition** - Framing, perspective, layout
+3. **Action** - What is happening
+4. **Location** - Setting, environment, context
+5. **Style** - Overall aesthetic approach
+6. **Lighting** - Illumination details and mood
+
+**Optional enhancements:**
+- **Camera Details** - Lens, focal length, depth of field
+- **Materiality** - Textures, surface qualities
 
 ## Icon Generation
 
 ### Minimalist Icon
 ```
-Generate a minimalist [ICON_TYPE] icon for a website.
+Generate a minimalist [ICON_TYPE] icon for a website using the Six-Element Framework:
 
-Style: Clean, simple lines, modern design
-Format: Single color or minimal color palette
+Subject: [Describe the icon element - e.g., "Simple house silhouette with pitched roof"]
+Composition: Centered in frame, balanced proportions, suitable for small sizes (24-128px)
+Action: Static, stable iconic representation
+Location: Isolated on transparent background, no environmental context
+Style: Minimalist line art, modern flat design, clean geometric shapes
+Lighting: Even lighting, no shadows, optimized for UI usage
+
+Camera & Materiality: N/A for flat icon design
+
+Technical Specifications:
+Colors: [COLOR_PALETTE] - typically single color or minimal palette
+Aspect Ratio: 1:1 (square)
+Resolution: 512x512 (or as specified)
 Background: Transparent preferred
-Size: Suitable for use as a navigation/UI icon
-Colors: [COLOR_PALETTE]
 
 Requirements:
-- Professional and recognizable
+- Professional and instantly recognizable
 - Works at small sizes (32px to 128px)
 - Clear silhouette
-- Web-optimized
+- Web-optimized for navigation/UI use
 ```
 
 ### Detailed Icon
 ```
-Generate a detailed [ICON_TYPE] icon with depth and dimension.
+Generate a detailed [ICON_TYPE] icon with depth and dimension using the Six-Element Framework:
 
-Style: Modern, dimensional, with subtle shadows and highlights
-Format: Multi-color with gradient accents
-Background: Transparent or subtle background
-Colors: [COLOR_PALETTE]
+Subject: [Detailed icon element with specific attributes - e.g., "Stylized camera with lens, buttons, and viewfinder"]
+Composition: Centered, slight 3/4 angle to show dimension, balanced visual weight
+Action: Static but suggesting functionality/purpose
+Location: Isolated with subtle shadow or glow for depth
+Style: Modern dimensional design with gradients and highlights, rich visual detail
+Lighting: Soft directional lighting from top-left creating subtle shadows and highlights, adds depth
+
+Camera & Materiality: 
+- Slight isometric or 3/4 perspective
+- Materials: Glossy surfaces with subtle reflections, metallic accents
+
+Technical Specifications:
+Colors: [COLOR_PALETTE] - multi-color with gradient accents
+Aspect Ratio: 1:1 (square)
+Resolution: 512x512 or higher for detail
+Background: Transparent or subtle gradient
 
 Requirements:
-- Rich visual detail
+- Rich visual detail and depth
 - Recognizable at medium to large sizes
-- Professional quality
-- App icon or feature icon style
+- Professional app icon quality
+- Dimensional, polished appearance
 ```
 
 ## Banner Generation
 
 ### Hero Banner
 ```
-Generate a modern hero banner for [PURPOSE/INDUSTRY].
+Generate a modern hero banner for [PURPOSE/INDUSTRY] using the Six-Element Framework:
 
-Scene: [SPECIFIC_SCENE_DESCRIPTION]
-Style: [Modern/Minimalist/Bold/Elegant/etc.]
-Composition: [Layout description]
-Colors: [COLOR_PALETTE]
-Elements: [List key visual elements]
-Text Space: Reserve space for [HEADLINE/CTA/etc.]
+Subject: [Describe main visual elements - e.g., "Abstract geometric shapes, flowing particles, tech elements"]
+Composition: [Layout - e.g., "Wide shot with rule of thirds, negative space on left for text, visual weight on right"]
+Action: [What's happening - e.g., "Subtle particle movement suggesting innovation, energy flowing through connecting lines"]
+Location: [Environment - e.g., "Contemporary digital space, infinite depth, cloud-like atmosphere"]
+Style: [Aesthetic - e.g., "Modern minimalist with vibrant gradients, professional SaaS aesthetic"]
+Lighting: [Illumination - e.g., "Soft ambient glow from gradient background, subtle rim lighting on geometric elements from top-right"]
 
-Technical:
-- Aspect Ratio: 16:9
-- Resolution: 1920x1080
-- Web-optimized
+Camera & Materiality:
+- Perspective: [e.g., "Slight elevated view, medium depth of field"]
+- Materials: [e.g., "Glass-like gradient surfaces, subtle metallic sheen on shapes"]
+
+Technical Specifications:
+Aspect Ratio: 16:9
+Resolution: 1920x1080
+Colors: [COLOR_PALETTE - e.g., "#667EEA (primary), #764BA2 (secondary), #F093FB (accent)"]
+Text Space: [e.g., "Reserve left third area clear for headline and CTA"]
 
 Requirements:
 - Eye-catching and professional
 - Balanced composition
 - Clear focal point
-- Suitable for hero section
+- Suitable for website hero section
+- Web-optimized
 ```
 
 ### Email Header
@@ -88,70 +130,93 @@ Requirements:
 
 ### Instagram Post
 ```
-Generate an Instagram post for [TOPIC/CAMPAIGN].
+Generate an Instagram post for [TOPIC/CAMPAIGN] using the Six-Element Framework:
 
-Content: [CONTENT_DESCRIPTION]
-Style: [Instagram aesthetic - bright/moody/minimal/etc.]
+Subject: [Main visual elements - e.g., "Product shot with lifestyle elements, brand imagery"]
+Composition: [Layout - e.g., "Centered focus with rule of thirds, balanced visual weight, mobile-optimized"]
+Action: [What's happening - e.g., "Product in use, lifestyle moment, static display"]
+Location: [Setting - e.g., "Clean modern environment, lifestyle context, minimal background"]
+Style: [Aesthetic - e.g., "Modern Instagram aesthetic - bright, clean, engaging, thumb-stopping"]
+Lighting: [Illumination - e.g., "Bright natural lighting, soft shadows, vibrant and inviting mood"]
+
+Camera & Materiality:
+- Camera: [e.g., "Shot as if from smartphone, natural perspective, slight warmth"]
+- Materials: [e.g., "Natural textures, authentic feel, relatable surfaces"]
+
+Technical Specifications:
+Aspect Ratio: 1:1
+Resolution: 1080x1080
 Colors: [COLOR_PALETTE]
-Typography: [If text included - style preferences]
-Brand Elements: [Logo/watermark placement]
-
-Technical:
-- Aspect Ratio: 1:1
-- Resolution: 1080x1080
-- Mobile-optimized
+Brand Elements: [Logo/watermark placement if needed]
+Text Space: [If text included - specify safe areas]
 
 Requirements:
-- Thumb-stopping visual
+- Thumb-stopping visual appeal
 - On-brand aesthetic
+- Mobile-optimized composition
 - Engagement-focused
-- Social media best practices
+- Instagram best practices
 ```
 
 ### Instagram Story
 ```
-Generate an Instagram Story graphic for [PURPOSE].
+Generate an Instagram Story graphic for [PURPOSE] using the Six-Element Framework:
 
-Layout: [Vertical composition description]
-Style: [Modern/Bold/Minimal/etc.]
+Subject: [Main content - e.g., "Product showcase, announcement, behind-the-scenes moment"]
+Composition: [Layout - e.g., "Vertical flow with visual hierarchy, text-safe zones top/bottom, focal point in center third"]
+Action: [What's happening - e.g., "Dynamic product reveal, swipe-up prompt, interactive poll setup"]
+Location: [Setting - e.g., "Brand environment, lifestyle context, or abstract branded space"]
+Style: [Aesthetic - e.g., "Bold and engaging, modern story aesthetic, on-brand visual treatment"]
+Lighting: [Illumination - e.g., "Bright, energetic lighting for engagement, clear visibility on mobile"]
+
+Camera & Materiality:
+- Camera: [e.g., "Mobile-first vertical perspective, engaging eye-level or slight high angle"]
+- Materials: [e.g., "Contemporary textures, relatable surfaces"]
+
+Technical Specifications:
+Aspect Ratio: 9:16
+Resolution: 1080x1920
 Colors: [COLOR_PALETTE]
-Interactive Elements: [Poll/Quiz/Swipe-up area]
-Text Space: Reserve space for [CAPTION/CTA]
-
-Technical:
-- Aspect Ratio: 9:16
-- Resolution: 1080x1920
-- Safe zones for UI elements
+Interactive Elements: [Space for polls, quiz, swipe-up, etc.]
+Safe Zones: Top 250px and bottom 250px for UI elements
 
 Requirements:
 - Engaging and interactive
 - Text/elements within safe zones
-- Vertical-first design
+- Vertical-first mobile design
 - Story-specific best practices
+- Maintains visibility with UI overlays
 ```
 
 ## Background Assets
 
 ### Website Background
 ```
-Generate a website background for [PAGE_TYPE].
+Generate a website background for [PAGE_TYPE] using the Six-Element Framework:
 
-Pattern/Style: [Geometric/Organic/Abstract/etc.]
-Color Scheme: [COLOR_PALETTE]
-Density: [Subtle/Medium/Bold]
-Focus: [Where should attention go - center/sides/etc.]
-Texture: [Smooth/Grainy/etc.]
+Subject: [Pattern/Elements - e.g., "Abstract geometric pattern, organic shapes, gradient mesh, particle field"]
+Composition: [Layout - e.g., "Subtle pattern with density higher in corners, center area more sparse for content"]
+Action: [Visual energy - e.g., "Subtle implied movement, static but dynamic feel, gentle flow"]
+Location: [Conceptual space - e.g., "Digital environment, abstract space, atmospheric depth"]
+Style: [Aesthetic - e.g., "Modern minimalist, subtle and professional, doesn't compete with content"]
+Lighting: [Illumination - e.g., "Soft ambient lighting, gentle gradation, no harsh contrasts"]
 
-Technical:
-- Aspect Ratio: [Based on use - 16:9, 21:9, etc.]
-- Resolution: [2K or 4K for large displays]
-- Tileable: [Yes/No]
+Camera & Materiality:
+- Perspective: [e.g., "Slight depth, layered appearance"]
+- Materials: [e.g., "Smooth gradient surfaces, soft translucent shapes, subtle texture"]
+
+Technical Specifications:
+Aspect Ratio: [Based on use - 16:9, 21:9, or custom]
+Resolution: [2K or 4K for large displays - e.g., "2560x1440" or "3840x2160"]
+Colors: [COLOR_PALETTE]
+Tileable: [Yes/No - if needed for repeating pattern]
+Focus: [Where attention should go - "subtle, content remains primary focus"]
 
 Requirements:
-- Doesn't distract from content
+- Doesn't distract from foreground content
 - Professional and modern
-- Works with overlay text
-- Performance optimized
+- Works with overlay text and UI elements
+- Performance optimized (balance quality/file size)
 ```
 
 ### Gradient Background
@@ -347,49 +412,160 @@ When using templates, replace these variables:
 
 ## Prompt Enhancement Tips
 
-### Add Detail Progressively
+### The Power of the Six-Element Framework
 
-**Basic:**
+**Basic (Weak):**
 ```
 Generate a hero banner for a tech startup
 ```
 
-**Better:**
+**Better (Adding Some Structure):**
 ```
 Generate a modern hero banner for a tech startup with gradient background
 ```
 
-**Best:**
+**Best (Full Six-Element Framework):**
 ```
-Generate a modern tech startup hero banner with gradient background from deep blue (#667EEA) to vibrant purple (#764BA2), featuring abstract geometric elements (floating particles, connecting lines), leaving the center-left area clear for overlaying headline text. Professional, eye-catching, and contemporary design suitable for a SaaS landing page.
+Generate a modern hero banner for a tech startup using the Six-Element Framework:
+
+Subject: Abstract geometric shapes (floating hexagons, connecting lines, energy particles) creating tech-forward atmosphere
+Composition: Wide shot with rule of thirds, negative space on left for text, visual weight balanced on right side
+Action: Subtle upward particle drift suggesting innovation and progress, energy flowing through connecting nodes
+Location: Contemporary digital space with infinite depth, cloud-like SaaS environment
+Style: Modern minimalist with vibrant gradients (blue to purple spectrum), clean professional aesthetic for enterprise SaaS
+Lighting: Soft ambient glow from gradient background, subtle rim lighting on geometric elements from top-right creating depth
+
+Camera & Materiality:
+- Slight elevated perspective viewing 3D space
+- Glass-like gradient surfaces with smooth quality
+- Geometric shapes with subtle metallic sheen
+
+Technical: 16:9, 1920x1080, colors #667EEA, #764BA2, #F093FB
 ```
+
+### Progressive Detail Addition
+
+Start simple and add layers of detail:
+
+1. **Layer 1 - Basic Elements**
+   ```
+   Subject: Product on desk
+   ```
+
+2. **Layer 2 - Add Specifics**
+   ```
+   Subject: Smart speaker on natural wood desk
+   Composition: Centered, slight elevated angle
+   ```
+
+3. **Layer 3 - Add Context & Style**
+   ```
+   Subject: Premium smart speaker on natural oak desk
+   Composition: Centered hero shot, elevated 30-degree angle
+   Location: Modern minimalist home office
+   Style: Clean product photography, premium aesthetic
+   ```
+
+4. **Layer 4 - Complete Framework**
+   ```
+   Subject: Premium smart speaker in matte black finish on natural oak desk
+   Composition: Centered hero shot, elevated 30-degree angle, rule of thirds
+   Action: Static premium display, suggesting quiet sophistication
+   Location: Modern minimalist home office with soft-focus plant in background
+   Style: Clean product photography, premium lifestyle aesthetic
+   Lighting: Soft diffused daylight from window left, subtle rim light top-right, gentle shadow underneath
+   
+   Camera & Materiality:
+   - 85mm equivalent lens, f/2.8 for subtle background blur
+   - Matte speaker finish, natural wood grain texture visible
+   ```
 
 ### Specify Style References
 
-Instead of just "modern", be specific:
-- "Modern flat design with bold colors"
-- "Modern with subtle gradients and soft shadows"
-- "Modern minimalist with lots of white space"
-- "Modern with glassmorphism effects"
-- "Modern with 3D elements and depth"
+Instead of vague terms, use the Six-Element Framework with specific style descriptors:
+
+**Vague:**
+- "Modern style"
+
+**Specific with Framework:**
+- Subject: Clean, minimal elements
+- Composition: Balanced with breathing room
+- Action: Calm, professional energy
+- Location: Contemporary digital space
+- Style: Modern flat design with subtle gradients and soft shadows
+- Lighting: Soft, even illumination with gentle depth
+
+**Style Reference Examples:**
+- "Modern minimalist with lots of white space and subtle shadows"
+- "Modern with glassmorphism effects (frosted glass, transparency, subtle blur)"
+- "Modern with bold 3D elements and dramatic depth"
+- "Modern flat design 2.0 with long shadows and vibrant colors"
+- "Contemporary with organic flowing shapes and nature-inspired forms"
 
 ### Include Technical Requirements
 
-Always specify:
-- Aspect ratio (for the use case)
-- Approximate resolution (or relative - thumbnail vs hero)
-- Color palette (with hex codes when possible)
-- Where text/logos will be placed
-- Any elements to include or avoid
+Always specify using the complete framework:
+
+**Essential Technical Details:**
+- **Aspect ratio** - For the specific use case (1:1, 16:9, 9:16, etc.)
+- **Resolution** - Actual pixels or quality level (1080p, 2K, 4K)
+- **Color palette** - Hex codes whenever possible for accuracy
+- **Text/logo placement** - Specific areas to keep clear
+- **Elements to include/avoid** - Explicit requirements
+
+**Framework Template:**
+```
+[Six-Element Framework sections here]
+
+Technical Specifications:
+Aspect Ratio: [ratio]
+Resolution: [width x height]
+Colors: [#hex1, #hex2, #hex3]
+Text Space: [specific area description]
+Brand Assets: [logo placement, watermark, etc.]
+
+Requirements:
+- [Specific technical constraints]
+- [Quality standards]
+- [Output format needs]
+```
 
 ### Use Composition Language
 
-Describe layout using standard terms:
-- "Rule of thirds composition"
-- "Center-aligned with symmetry"
-- "Dynamic diagonal composition"
+Describe layout using standard terms within the Composition element:
+
+**Camera Framing:**
+- "Extreme close-up" - Very tight on subject
+- "Close-up" - Subject fills most of frame
+- "Medium shot" - Subject and some context
+- "Wide shot" - Subject in environment
+- "Extreme wide shot" - Emphasis on environment
+
+**Layout Patterns:**
+- "Rule of thirds composition" - Visual elements on intersection points
+- "Center-aligned with symmetry" - Balanced, formal
+- "Dynamic diagonal composition" - Energy and movement
+- "Golden ratio spiral" - Natural, pleasing composition
+- "Frame within a frame" - Use environmental elements to frame subject
+
+**Perspective:**
+- "Eye level" - Neutral, relatable
+- "Low angle looking up" - Powerful, dramatic
+- "High angle looking down" - Overview, subordinate
+- "Bird's eye view" - Top-down, architectural
+- "Worm's eye view" - Ground-level, unique
+
+**Visual Weight:**
 - "Focal point in upper right third"
-- "Breathing room on left for text"
+- "Negative space on left for text overlay"
+- "Visual weight balanced between sides"
+- "Breathing room around main subject"
+- "Asymmetric balance with intentional tension"
+
+**Example Using Composition Language:**
+```
+Composition: Medium shot with rule of thirds, subject positioned on right vertical third, negative space on left for headline text. Low angle perspective adding authority, asymmetric balance creating visual interest while maintaining professionalism.
+```
 
 ## Testing Your Prompts
 

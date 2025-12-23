@@ -25,9 +25,10 @@ Nano Banana Pro is Google's most advanced image-generation and editing model, bu
 - **Multi-Image Blending**: Consistent style across multiple generations with superior quality
 - **Text Rendering**: Industry-leading text placement in images (94-96% accuracy) with multilingual layouts
 - **Fine-Grained Controls**: Localized edits, lighting adjustments, focus control, camera transformations
-- **Flexible Outputs**: Support for 2K/4K outputs and multiple aspect ratios (1:1, 16:9, 9:16, 4:3, 21:9, etc.)
+- **Flexible Outputs**: Support for 2K/4K outputs and multiple aspect ratios (1:1, 16:9, 9:16, 4:3, 3:4, 21:9, 9:21, 2:3, 3:2, 5:4, 4:5)
 - **Context-Rich Graphics**: From infographics and diagrams to cinematic composites
 - **Conversational Editing**: Iterative, multi-turn editing workflows for refinement
+- **Photorealistic Quality**: Advanced multimodal reasoning for professional-quality outputs
 
 **Understanding Image Limits:**
 - **Reference Images**: You can include up to 14 reference images in a single API request
@@ -88,14 +89,24 @@ Use this when the user needs one specific asset (icon, banner, background, etc.)
    - Color palette (hex codes)
    - Any reference images or logos
 
-2. Build the prompt:
+2. Build the prompt using the **Six-Element Framework** (Google's recommended approach):
    ```
    Generate a high-quality [asset type] with the following specifications:
    
-   Description: [detailed description]
+   Subject: [Who/what is in the image - be specific about physical attributes, elements]
+   Composition: [Framing, perspective, layout - e.g., "centered", "rule of thirds", "close-up", "wide shot"]
+   Action: [What is happening - static pose, interaction, movement]
+   Location: [Setting, environment, context - where the scene takes place]
+   Style: [Overall aesthetic - photorealistic, flat design, minimalist, bold, etc.]
+   Lighting: [Specific lighting setup - "soft diffused daylight", "dramatic side lighting", "golden hour", etc.]
+   
+   Camera Details: [Optional - "85mm lens", "shallow depth of field", "low angle", etc.]
+   Materiality: [Optional - texture details like "matte finish", "brushed steel", "translucent glass"]
+   
+   Technical Specifications:
    Aspect Ratio: [ratio]
    Resolution: [resolution]
-   Color Palette: [colors]
+   Color Palette: [hex codes]
    
    Requirements:
    - Professional, web-ready quality
@@ -110,20 +121,30 @@ Use this when the user needs one specific asset (icon, banner, background, etc.)
 
 5. Present the images to the user
 
-**Example prompt:**
+**Example prompt (using Six-Element Framework):**
 ```
 Generate a high-quality hero banner with the following specifications:
 
-Description: Modern tech startup hero banner with gradient background from blue (#667EEA) to purple (#764BA2), abstract geometric elements, and space for overlaying text. Clean, professional, and eye-catching design.
+Subject: Abstract geometric shapes (floating hexagons, connecting lines, particles) creating a tech-forward atmosphere
+Composition: Wide shot with visual weight on right side, negative space on left for text overlay, balanced with rule of thirds
+Action: Subtle sense of movement with particles drifting upward, energy flowing through connecting lines
+Location: Digital space with infinite depth, contemporary tech environment
+Style: Modern minimalist with vibrant gradients, clean professional aesthetic suitable for SaaS landing page
+Lighting: Soft ambient glow from gradient background, subtle rim lighting on geometric elements to create depth
+
+Camera Details: Slight elevated perspective, as if viewing a 3D space, medium depth of field
+Materiality: Gradient elements have smooth glass-like quality, geometric shapes with subtle metallic sheen
+
+Technical Specifications:
 Aspect Ratio: 16:9
 Resolution: 1920x1080
-Color Palette: #667EEA, #764BA2, #F093FB
+Color Palette: #667EEA (primary blue), #764BA2 (deep purple), #F093FB (accent pink)
 
 Requirements:
 - Professional, web-ready quality
-- Modern and visually appealing design
+- Eye-catching yet not overwhelming
+- Clear space on left third for headline text
 - Optimized for digital use
-- Clean and polished appearance
 ```
 
 ### 2. Generate Asset Pack
@@ -145,20 +166,28 @@ Use this when the user needs multiple related assets maintaining brand consisten
    - Logo file (if any)
    - Default aspect ratio and resolution
 
-2. Build the prompt:
+2. Build the prompt using the **Six-Element Framework**:
    ```
    Generate a complete, brand-consistent asset pack for web development:
    
    Project Description: [description]
    
    Asset Types to Generate:
-   1. [asset type 1]
-   2. [asset type 2]
-   3. [asset type 3]
+   1. [asset type 1] - Subject: [...], Composition: [...], Style: [...]
+   2. [asset type 2] - Subject: [...], Composition: [...], Style: [...]
+   3. [asset type 3] - Subject: [...], Composition: [...], Style: [...]
    ...
    
    Brand Guidelines:
-   [guidelines]
+   Subject Matter: [What visual elements represent the brand]
+   Composition Approach: [How elements should be arranged - balanced, dynamic, minimal, etc.]
+   Visual Actions: [Static vs dynamic, energy level, mood]
+   Contextual Environment: [Where these assets exist - digital, physical, abstract]
+   Overall Style: [Aesthetic direction - minimalist, bold, elegant, playful, etc.]
+   Lighting Treatment: [Consistent lighting approach across all assets]
+   
+   Camera & Materiality:
+   [Any specific perspective or texture requirements]
    
    Brand Color Palette: [colors]
    Default Aspect Ratio: [ratio]
@@ -179,23 +208,31 @@ Use this when the user needs multiple related assets maintaining brand consisten
 
 5. Present each asset with its type/purpose labeled
 
-**Example prompt:**
+**Example prompt (with Six-Element Framework):**
 ```
 Generate a complete, brand-consistent asset pack for web development:
 
 Project Description: Social media kit for an eco-friendly coffee brand targeting young professionals
 
 Asset Types to Generate:
-1. Instagram post (square, 1:1)
-2. Instagram story (vertical, 9:16)
-3. Facebook cover (wide banner)
-4. Twitter header (wide banner)
-5. App icon (square, simple)
+1. Instagram post (square, 1:1) - Subject: Coffee cup with natural elements, Composition: Centered product shot, Style: Warm and inviting
+2. Instagram story (vertical, 9:16) - Subject: Brewing process with eco messaging, Composition: Vertical flow top to bottom, Style: Dynamic and engaging
+3. Facebook cover (wide banner) - Subject: Coffee beans and sustainable packaging, Composition: Wide panoramic layout, Style: Professional and earthy
+4. Twitter header (wide banner) - Subject: Brand story visual elements, Composition: Horizontal narrative, Style: Clean and modern
+5. App icon (square, simple) - Subject: Stylized coffee cup or bean, Composition: Centered symbol, Style: Minimalist and recognizable
 
 Brand Guidelines:
-Minimalist, nature-inspired, earthy aesthetics. Focus on sustainability, organic elements, and natural textures. Warm and inviting tone. Use coffee-related imagery with environmental themes.
+Subject Matter: Natural coffee elements (beans, cups, plants), sustainable packaging, organic textures, eco-friendly themes
+Composition Approach: Clean, balanced layouts with breathing room, focus on product and nature harmony
+Visual Actions: Static, serene presentations with subtle organic movement suggestions
+Contextual Environment: Natural light settings, wooden surfaces, green plants, sustainable materials backdrop
+Overall Style: Minimalist, nature-inspired, earthy aesthetics. Modern organic fusion with professional polish.
+Lighting Treatment: Warm, soft natural light (golden hour quality), gentle shadows, inviting and cozy atmosphere
 
-Brand Color Palette: #2ECC71, #27AE60, #8B4513, #F5F5DC
+Camera & Materiality:
+Slight top-down or 3/4 angles for product shots, natural wood grain textures, matte ceramic finishes, organic paper textures
+
+Brand Color Palette: #2ECC71 (eco green), #27AE60 (forest), #8B4513 (coffee brown), #F5F5DC (cream)
 Default Aspect Ratio: 1:1
 Default Resolution: 1080x1080
 
@@ -227,11 +264,21 @@ Use this when the user wants to modify an existing image.
    - Target aspect ratio (if changing)
    - Target resolution (if changing)
 
-3. Build the prompt:
+3. Build the prompt with detailed editing instructions:
    ```
    Edit the provided image with the following instructions:
    
-   Edit Instructions: [specific edits]
+   Edit Instructions: [Specific edits using the Six-Element Framework]
+   - Subject modifications: [What elements to add, remove, or change]
+   - Composition adjustments: [Layout, framing, perspective changes]
+   - Action changes: [Modify movement, energy, or static elements]
+   - Location alterations: [Background, environment, context changes]
+   - Style refinements: [Aesthetic adjustments, visual treatment]
+   - Lighting adjustments: [Specific lighting changes - "warmer tones", "increase contrast", "soften shadows"]
+   
+   Camera & Detail Changes:
+   - [Optional: focal point, depth of field, perspective adjustments]
+   - [Optional: texture, materiality, surface quality changes]
    
    Preserve These Elements: [elements to keep]
    Target Aspect Ratio: [ratio]
@@ -251,13 +298,24 @@ Use this when the user wants to modify an existing image.
 
 6. Present the edited image to the user
 
-**Example prompt with image:**
+**Example prompt with image (using Six-Element Framework):**
 ```
 Edit the provided image with the following instructions:
 
-Edit Instructions: Adjust lighting to be warmer with golden hour tones, increase contrast by 20%, soften shadows, and add a subtle vignette effect around the edges. Make the overall mood more inviting and cozy.
+Edit Instructions:
+- Subject modifications: Enhance the main product to appear more premium, add subtle glow effect around edges
+- Composition adjustments: Maintain current centered composition but add slight depth with background blur
+- Action changes: Keep static presentation but add subtle energy with light particles
+- Location alterations: Keep current setting but add warmer, more inviting environmental tones
+- Style refinements: Shift toward more premium, upscale aesthetic while maintaining brand identity
+- Lighting adjustments: Adjust to golden hour lighting quality - warm amber tones from top-left, increase contrast by 20%, soften hard shadows to create more inviting mood, add subtle vignette effect around edges for focus
 
-Preserve These Elements: logo in top-left corner, main product in center, text overlay at bottom
+Camera & Detail Changes:
+- Simulate shallow depth of field effect (85mm equivalent)
+- Enhance material quality: make surfaces appear more premium with subtle highlights
+- Add subtle warm color grading throughout
+
+Preserve These Elements: logo in top-left corner, main product in center, text overlay at bottom, brand colors in text elements
 
 Editing Requirements:
 - Apply edits precisely as instructed
@@ -665,15 +723,24 @@ X-Title: Nano Banana Assets Generator
 
 ## Supported Aspect Ratios
 
-- `1:1` - Square (Instagram posts, icons, profile pictures)
-- `16:9` - Widescreen (YouTube thumbnails, web banners, hero sections)
-- `9:16` - Vertical (Instagram/Facebook stories, mobile screens)
-- `4:3` - Traditional (presentations, older displays)
-- `3:4` - Vertical traditional
-- `21:9` - Ultra-wide (cinematic, wide banners)
-- `9:21` - Ultra-tall
-- `2:3` - Portrait
-- `3:2` - Landscape
+The following aspect ratios are supported by Gemini/Nano Banana Pro (per official Google documentation):
+
+**Landscape formats:**
+- `21:9` - Ultra-wide cinematic (ideal for hero banners, cinematic compositions)
+- `16:9` - Widescreen (YouTube thumbnails, web banners, hero sections, presentations)
+- `4:3` - Traditional landscape (presentations, older displays)
+- `3:2` - Standard photo landscape (traditional photography)
+- `5:4` - Landscape with slight squareness
+
+**Square format:**
+- `1:1` - Square (Instagram posts, icons, profile pictures, avatars)
+
+**Portrait formats:**
+- `9:16` - Vertical widescreen (Instagram/Facebook stories, mobile screens, TikTok)
+- `3:4` - Traditional portrait (traditional photography)
+- `2:3` - Portrait photo standard (magazine covers, portraits)
+- `4:5` - Portrait with slight width
+- `9:21` - Ultra-tall portrait (rare, specialized mobile UI)
 
 ## Supported Resolutions
 
@@ -688,7 +755,92 @@ X-Title: Nano Banana Assets Generator
 
 ## Best Practices
 
-### Writing Effective Prompts
+### Writing Effective Prompts (Google's Six-Element Framework)
+
+Google's research shows that prompts structured around six core elements produce the best results with Gemini models:
+
+1. **Subject: Define Who/What**
+   - Be specific about the main elements, characters, or objects
+   - Include physical attributes, characteristics, and details
+   - ❌ "A banner"
+   - ✅ "A modern SaaS hero banner featuring abstract geometric shapes (floating hexagons, connecting nodes, light particles)"
+
+2. **Composition: Describe Framing & Layout**
+   - Specify camera angles, framing, and perspective
+   - Use standard photography/design terms
+   - ❌ "Nice layout"
+   - ✅ "Wide shot with rule of thirds composition, negative space on left third for text overlay, visual weight balanced on right"
+
+3. **Action: Explain What's Happening**
+   - Describe movement, interactions, or static positioning
+   - Define energy level and dynamics
+   - ❌ "Some movement"
+   - ✅ "Subtle upward particle drift creating sense of innovation and progress, energy flowing through connecting lines"
+
+4. **Location: Set the Environment**
+   - Describe setting, context, and surroundings
+   - Include environmental details that enhance the scene
+   - ❌ "Tech background"
+   - ✅ "Contemporary digital workspace with infinite depth, clean minimal environment suggesting cloud/SaaS platform"
+
+5. **Style: Define the Aesthetic**
+   - Be specific about visual treatment and design approach
+   - Reference design movements, art styles, or specific aesthetics
+   - ❌ "Modern look"
+   - ✅ "Modern minimalist with vibrant gradients, flat design principles, clean professional aesthetic suitable for enterprise SaaS"
+
+6. **Lighting: Specify Illumination Details**
+   - Describe light sources, quality, direction, and mood
+   - Include shadows, highlights, and atmospheric effects
+   - ❌ "Good lighting"
+   - ✅ "Soft ambient glow from gradient background, subtle rim lighting on geometric elements from top-right creating depth, gentle shadows"
+
+### Advanced Prompt Enhancements
+
+1. **Camera Details** (Optional but Powerful)
+   - Lens specifications: "85mm portrait lens", "24mm wide angle"
+   - Focal properties: "shallow depth of field", "everything in focus"
+   - Perspective: "low angle looking up", "bird's eye view", "eye level"
+   - Example: "Shot with 85mm equivalent focal length, f/2.8 aperture for subtle background blur"
+
+2. **Materiality & Texture** (For Product/Design Assets)
+   - Surface qualities: "matte finish", "glossy", "brushed metal", "frosted glass"
+   - Texture details: "smooth gradient", "paper texture", "fabric weave", "metallic sheen"
+   - Example: "Gradient elements have smooth glass-like quality, geometric shapes with subtle metallic sheen, soft velvety background"
+
+3. **Full Sentence Narratives**
+   - Use natural language, not just keywords
+   - Brief the AI like a creative director
+   - ❌ "blue purple gradient tech shapes modern"
+   - ✅ "Create a hero shot featuring an abstract technology landscape with flowing gradients from deep blue to vibrant purple, populated with geometric shapes that suggest connectivity and innovation"
+
+### Iterative Conversational Editing
+
+Nano Banana Pro excels at multi-turn refinement. Instead of regenerating, use conversational edits:
+
+**Initial Prompt:**
+```
+Generate a product banner for smart home device...
+```
+
+**Follow-up Edit 1:**
+```
+Make the lighting warmer and more inviting, shift from cool tones to golden hour quality
+```
+
+**Follow-up Edit 2:**
+```
+Add the brand logo in top-left corner, subtle drop shadow, 15% opacity
+```
+
+**Follow-up Edit 3:**
+```
+Increase the contrast of the main product by 20%, make it pop more against the background
+```
+
+This preserves composition and layout while refining specific aspects.
+
+### Writing Effective Prompts (Legacy Guidelines - Still Valid)
 
 1. **Be Specific and Detailed**
    - ❌ "Make a banner"
@@ -728,16 +880,27 @@ X-Title: Nano Banana Assets Generator
 
 ### Reference Images
 
-1. **Use Up to 5 Reference Images**
-   - Style references (overall look)
-   - Composition references (layout)
-   - Color treatment references (mood)
-   - Technical references (quality level)
+1. **Use Up to 14 Reference Images (Not Just 5)**
+   - Nano Banana Pro supports up to **14 reference images** per request
+   - Use for style guidance, composition examples, and identity preservation
+   - Categories of references:
+     - **Style references**: Overall aesthetic and visual treatment (1-3 images)
+     - **Composition references**: Layout and arrangement examples (1-2 images)
+     - **Color treatment references**: Mood and color grading (1-2 images)
+     - **Subject/identity references**: For maintaining character or product consistency (up to 5 distinct subjects)
+     - **Technical references**: Quality level and detail expectations (1-2 images)
+     - **Brand assets**: Logos and brand elements (1-2 images)
 
 2. **Provide Context for References**
-   - Explain what aspect to emulate
+   - Explain what aspect to emulate from each reference
    - Clarify what to avoid from the reference
-   - Specify if it's for style, composition, or color only
+   - Specify if it's for style, composition, color, or subject identity
+   - Example: "Reference image 1 shows the composition layout to follow. Reference image 2 demonstrates the lighting quality desired."
+
+3. **Identity Preservation Across References**
+   - Model can maintain consistency for up to **5 distinct subjects/characters** across the 14 references
+   - Use multiple angles/views of same subject to strengthen identity preservation
+   - Explicitly mention: "Maintain the visual identity shown in reference images 1-3"
 
 ### Brand Consistency
 
@@ -834,13 +997,28 @@ X-Title: Nano Banana Assets Generator
 
 **Your Response:**
 ```
-I'll generate a home icon for your website. Let me create a clean, professional icon.
+I'll generate a home icon for your website using the Six-Element Framework for optimal results.
 
 API Request:
-- Prompt: "Generate a minimalist home icon for a website. Simple, clean lines, modern design. Suitable for use as a navigation icon. White icon on transparent background."
+
+Subject: Simple house silhouette with pitched roof and centered door, clean geometric shape
+Composition: Centered in frame, balanced proportions, suitable for small sizes
+Action: Static, stable presentation representing home/safety
+Location: Isolated on transparent background, no environmental context
+Style: Minimalist line art, modern flat design, professional and recognizable
+Lighting: Even lighting, no shadows, clean silhouette optimized for UI
+
+Technical Specifications:
 - Aspect Ratio: 1:1
 - Resolution: 512x512
-- Style: Minimalist, professional
+- Color: Single color (#2D3748) on transparent background
+- Format: Clean vector-style appearance
+
+Requirements:
+- Professional and instantly recognizable
+- Works at small sizes (24px to 128px)
+- Clear silhouette
+- Web-optimized for navigation use
 
 [Make API call with these parameters]
 
@@ -854,22 +1032,54 @@ Generated icon:
 
 **Your Response:**
 ```
-I'll create a comprehensive social media kit for your coffee shop. What's your coffee shop's style and brand colors?
+I'll create a comprehensive social media kit for your coffee shop using the Six-Element Framework. What's your coffee shop's style and brand colors?
 
-[After getting details:]
+[After getting details: "Artisan style, warm colors #6F4E37 (coffee brown), #DEB887 (burlywood), #FFFDD0 (cream)"]
 
-I'll generate 4 assets for your coffee shop:
-1. Instagram post (square)
-2. Instagram story (vertical)
-3. Facebook cover
-4. Profile picture
+I'll generate 4 assets for your coffee shop with consistent visual identity:
 
 API Request:
-- Description: Social media kit for artisan coffee shop
-- Assets: instagram-post, instagram-story, facebook-cover, profile-picture
-- Brand: Cozy, artisan, warm atmosphere
-- Colors: #6F4E37, #DEB887, #FFFDD0
-- Style: Warm, inviting, crafted aesthetic
+
+Project Description: Social media kit for artisan coffee shop
+
+Asset Types with Specifications:
+
+1. Instagram Post (1:1, 1080x1080)
+   Subject: Artisan coffee cup on rustic wooden table with steam rising
+   Composition: Center-weighted, rule of thirds, product hero shot
+   Action: Steam gently rising, suggesting fresh brew
+   Location: Rustic coffee shop interior, warm wood surfaces
+   Style: Cozy artisan aesthetic, warm inviting tones, handcrafted feel
+   Lighting: Warm natural light from window (golden hour quality), soft shadows
+
+2. Instagram Story (9:16, 1080x1920)
+   Subject: Barista hands crafting latte art, close-up of pour
+   Composition: Vertical flow, action in center, text-safe zones top/bottom
+   Action: Dynamic pour in motion, showcasing craft
+   Location: Behind the bar, coffee shop environment
+   Style: Same artisan aesthetic, authentic craftsmanship
+   Lighting: Soft overhead lighting, warm tones
+
+3. Facebook Cover (wide format)
+   Subject: Coffee shop interior panorama with products
+   Composition: Wide horizontal sweep, welcoming view
+   Action: Inviting static scene, warm atmosphere
+   Location: Full coffee shop interior view
+   Style: Cohesive with artisan brand, professional yet cozy
+   Lighting: Ambient warm lighting throughout
+
+4. Profile Picture (1:1, circular crop-safe)
+   Subject: Coffee cup logo or stylized coffee bean
+   Composition: Centered, circular-safe design
+   Action: Static, iconic
+   Location: Isolated, clean background
+   Style: Simplified brand mark, recognizable
+   Lighting: Even, professional
+
+Brand Guidelines:
+Colors: #6F4E37 (coffee brown primary), #DEB887 (warm accent), #FFFDD0 (cream highlights)
+Consistent Elements: Warm wood textures, artisan handcrafted feel, natural lighting
+Materiality: Ceramic cups, wood surfaces, natural textures
 
 [Make API call]
 
@@ -883,12 +1093,36 @@ Generated assets:
 
 **Your Response:**
 ```
-I'll adjust the image to be warmer and brighter.
+I'll adjust the image to be warmer and brighter using the Six-Element Framework for precise edits.
 
 API Request:
-- Operation: Edit existing image
-- Instructions: Adjust color temperature to be warmer (add golden/yellow tones), increase overall brightness by 20%, maintain contrast
-- Preserve: Original composition, main subjects, any text
+
+Edit Instructions (Six-Element Framework):
+
+Subject modifications: Maintain all existing elements, enhance warmth without altering composition
+Composition adjustments: Keep current layout and framing unchanged
+Action changes: Preserve any existing movement or static positioning
+Location alterations: Keep environment as-is, adjust only atmospheric qualities
+Style refinements: Shift color temperature toward warmer spectrum, enhance vibrancy
+Lighting adjustments: 
+  - Add golden/amber color cast throughout (color temperature shift to ~3500K)
+  - Increase overall brightness by 20-25%
+  - Enhance warm highlights while maintaining detail
+  - Soften any harsh shadows with warm fill light effect
+  - Add subtle golden glow to light sources
+
+Camera & Detail: Maintain existing perspective and depth of field
+
+Preserve Elements: 
+- Original composition and layout
+- All subjects and main elements
+- Any text or logos
+- Core image structure
+
+Technical:
+- Maintain original aspect ratio and resolution
+- Ensure smooth, natural-looking color transitions
+- Preserve image detail and sharpness
 
 [Make API call with the provided image]
 
@@ -896,9 +1130,11 @@ Edited image:
 [Present the edited result]
 
 Changes applied:
-- Added warm golden tones
-- Increased brightness by 20%
-- Maintained original composition
+- Color temperature shifted to warm golden tones
+- Overall brightness increased by 20%
+- Warm lighting effect added throughout
+- Natural and inviting atmosphere enhanced
+- Original composition and elements preserved
 ```
 
 ### Example 4: Consistent Series (10 Icons)
@@ -907,74 +1143,109 @@ Changes applied:
 
 **Your Response:**
 ```
-I'll create a consistent set of 10 weather icons. Since this is more than 5 images, I'll use the sliding window technique to maintain consistency throughout.
+I'll create a consistent set of 10 weather icons using the Six-Element Framework and sliding window technique for maintaining consistency throughout the series.
 
-First, let me establish the base style...
+Series Overview (applies to all icons):
+- Subject: Weather symbols in minimalist line art style
+- Composition: Centered, balanced, circular-safe design
+- Action: Static, iconic representation
+- Location: Isolated on transparent background
+- Style: Modern minimalist, clean line art, 2px stroke weight, rounded line caps
+- Lighting: Even, no shadows, optimized for UI usage
+- Color: Monochrome #2D3748
+- Technical: 1:1 aspect ratio, 512x512 resolution
 
 [Icon 1 - Sunny]
-API Request:
-- Prompt: "Generate icon 1 of 10 for weather icon series:
-  
-  Series Context: Weather icon set with consistent minimalist style, 2px stroke weight, rounded line caps, monochrome design, clean and modern.
-  
-  This Image: Sunny weather icon - sun with rays
-  
-  Aspect Ratio: 1:1
-  Resolution: 512x512
-  Color: #2D3748 on transparent background
-  
-  Professional, web-ready quality with clean, simple design"
-  
-- References: None (establishing baseline)
+API Request using Six-Element Framework:
 
+Subject: Sun symbol - circular center with evenly spaced rays (8 rays radiating outward)
+Composition: Perfectly centered, balanced radial symmetry
+Action: Static, stable representation of sunshine
+Location: Isolated on transparent background, no context
+Style: Minimalist line art, 2px stroke weight, rounded line caps, modern and clean
+Lighting: Even illumination, no shadows, pure line work
+
+Technical: 1:1, 512x512, #2D3748 on transparent
+This is icon 1 of 10 in weather icon series - establishing baseline style
+
+References: None (establishing baseline)
 [Generate and store Icon 1]
 
 [Icon 2 - Cloudy]
 API Request:
-- Prompt: "Generate icon 2 of 10 for weather icon series:
-  
-  Series Context: Weather icon set with consistent minimalist style, matching the previous icon's stroke weight and design language.
-  
-  This Image: Cloudy weather icon - cloud shape
-  
-  Consistency Requirements:
-  - Match the visual style of the reference image exactly
-  - Same stroke weight, line caps, and design approach
-  - Ensure this feels like part of the same icon family
-  
-  IMPORTANT: The reference image shows the previously generated icon. Match its style exactly."
-  
-- References: [Icon 1]
 
+Subject: Cloud shape - rounded, fluffy cloud form with smooth curves
+Composition: Centered, following same centered approach as icon 1
+Action: Static cloud representation
+Location: Isolated on transparent, matching icon 1 treatment
+Style: Match icon 1's minimalist line art exactly, same 2px stroke, rounded caps
+Lighting: Even, matching icon 1's treatment
+
+Consistency Requirements:
+- Match the visual style of reference icon exactly
+- Same stroke weight (2px) and line caps (rounded)
+- Same level of detail and simplification
+- Cohesive with icon 1 in same family
+
+IMPORTANT: Reference image shows the previously generated sunny icon. Match its stroke weight, line caps, and minimalist approach exactly.
+
+References: [Icon 1]
 [Generate and store Icon 2]
 
-[Icons 3-5]
-Continue same pattern, adding all previous icons as references
-- Icon 3 references: [Icon 1, Icon 2]
-- Icon 4 references: [Icon 1, Icon 2, Icon 3]
-- Icon 5 references: [Icon 1, Icon 2, Icon 3, Icon 4]
+[Icons 3-5: Rainy, Stormy, Snowy]
+Continue same pattern, adding all previous icons as references:
 
-[Icon 6 - Windy] ← Sliding window begins
+Icon 3 (Rainy):
+Subject: Rain cloud with falling rain drops
+Same framework structure...
+References: [Icon 1, Icon 2]
+
+Icon 4 (Stormy):
+Subject: Dark storm cloud with lightning bolt
+Same framework structure...
+References: [Icon 1, Icon 2, Icon 3]
+
+Icon 5 (Snowy):
+Subject: Cloud with falling snowflakes
+Same framework structure...
+References: [Icon 1, Icon 2, Icon 3, Icon 4]
+
+[Icon 6 - Windy] ← Sliding window begins (using last 4-5 icons)
 API Request:
-- Same prompt structure
-- References: [Icon 2, Icon 3, Icon 4, Icon 5] ← Only last 4 icons (staying under 5 limit)
 
-[Icons 7-10]
-Continue with sliding window:
-- Icon 7 references: [Icon 3, Icon 4, Icon 5, Icon 6]
-- Icon 8 references: [Icon 4, Icon 5, Icon 6, Icon 7]
-- Icon 9 references: [Icon 5, Icon 6, Icon 7, Icon 8]
-- Icon 10 references: [Icon 6, Icon 7, Icon 8, Icon 9]
+Subject: Wind lines showing air movement, curved flowing lines
+Composition: Centered following established pattern
+Action: Suggests movement while remaining iconic
+Location: Isolated on transparent, consistent with series
+Style: Match established minimalist line art, 2px stroke, rounded caps
+Lighting: Even, no shadows
 
-✅ Complete! Generated 10 weather icons with consistent style throughout.
+Consistency Requirements:
+- Maintain same visual style as reference images
+- Same stroke weight, line caps, and design language
+- Part of cohesive weather icon family
+
+IMPORTANT: Reference images show previously generated icons. Match their style exactly.
+
+References: [Icon 2, Icon 3, Icon 4, Icon 5] ← Sliding window (last 4 icons)
+[Generate and store Icon 6]
+
+[Icons 7-10: Foggy, Partly Cloudy, Thunderstorm, Hail]
+Continue with sliding window approach:
+
+Icon 7: References [Icon 3, Icon 4, Icon 5, Icon 6]
+Icon 8: References [Icon 4, Icon 5, Icon 6, Icon 7]
+Icon 9: References [Icon 5, Icon 6, Icon 7, Icon 8]
+Icon 10: References [Icon 6, Icon 7, Icon 8, Icon 9]
+
+✅ Complete! Generated 10 weather icons with perfect consistency.
 
 Consistency strategy:
-- Icons 1-5: Each new icon referenced all previous ones
+- Icons 1-5: Each new icon referenced all previous ones (accumulating)
 - Icons 6-10: Sliding window of last 4 icons maintained consistency
+- All icons share: 2px stroke weight, rounded line caps, centered composition, minimalist style
 
-All icons share the same stroke weight, style, and visual language!
-
-[Present all 10 icons]
+[Present all 10 icons in a grid]
 ```
 
 ## Integration Tips
