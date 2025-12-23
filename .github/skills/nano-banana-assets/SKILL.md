@@ -1,19 +1,29 @@
 ---
 name: nano-banana-assets
-description: Generate professional web assets, icons, banners, backgrounds, and UI elements using OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview). Use when the user needs to create or edit images, graphics, or visual assets for web development, social media, branding, or design projects.
+description: Generate any kind of visual asset using OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview). Handles images, graphics, illustrations, icons, banners, backgrounds, UI elements, stickers, characters, and more. Flexible and adaptable to any creative request.
 license: MIT
 metadata:
   author: shelbeely
   version: "1.0.0"
   category: design-and-media
-  keywords: image-generation, assets, web-design, branding, openrouter, gemini
+  keywords: image-generation, assets, web-design, branding, openrouter, gemini, flexible, creative
 compatibility: Requires internet access and OpenRouter API key. Works with any agent that can make HTTP API calls.
-allowed-tools: fetch http-client curl
+allowed-tools: fetch http-client curl bash
 ---
 
 # Nano Banana Assets Generator Skill
 
-This skill enables AI agents to generate high-quality web assets using OpenRouter's Nano Banana Pro model (Google Gemini 3 Pro Image Preview). It provides professional asset generation, editing, and brand consistency management.
+This skill enables AI agents to generate **any kind of visual asset** using OpenRouter's Nano Banana Pro model (Google Gemini 3 Pro Image Preview). 
+
+**Use this skill when users request:**
+- Any image, graphic, or visual content
+- Icons, logos, banners, backgrounds, UI elements
+- Illustrations, characters, stickers, avatars
+- Product mockups, designs, compositions
+- Social media graphics, marketing materials
+- Creative artwork of any style or type
+
+**Key Philosophy:** Be flexible and creative. Adapt to the user's needs rather than forcing predefined templates.
 
 ## About Nano Banana Pro
 
@@ -76,35 +86,50 @@ When users need transparency, use a **bright chroma key color** that can be easi
 - ✅ Chroma key removal is cleaner than edge detection
 - ✅ Works perfectly with standard video/photo editing workflows
 
-**Automated Script Available:**
+**Automated Scripts Available:**
 
-For fully automated transparent asset generation, use the provided helper script:
+The skill includes several helper scripts in `scripts/` directory for various workflows:
 
+**1. Single Asset with Transparency (Recommended):**
 ```bash
-# Located in: scripts/generate_with_transparency.py
 cd .github/skills/nano-banana-assets/scripts
-python generate_with_transparency.py "Your prompt here" "1:1" "1024x1024"
+python generate_with_transparency.py "Your prompt" "1:1" "1024x1024"
 ```
+- ✅ Generates with #00FF00 chroma key (no fake checkered patterns)
+- ✅ Removes background with rembg (AI-powered)
+- ✅ Outputs transparent RGBA PNG files
+- ✅ Saves both transparent and original versions
 
-**This script automatically:**
-1. ✅ Generates with #00FF00 chroma key background (no fake checkered patterns)
-2. ✅ Removes background using rembg (AI-powered)
-3. ✅ Outputs transparent RGBA PNG files
-4. ✅ Saves both transparent and original versions
-
-**Example:**
+**2. Batch Generation:**
 ```bash
-python generate_with_transparency.py "Kawaii raccoon sticker waving" "1:1" "1024x1024"
-# Output: asset_1_transparent.png (with alpha transparency)
-#         asset_1_original_green.png (with green background for reference)
+# From config file
+python batch_generate.py --config example_batch_config.json --transparent
+
+# From prompts
+python batch_generate.py --prompts "Icon 1" "Icon 2" "Icon 3" --transparent
 ```
+- ✅ Generate multiple assets at once
+- ✅ Optional transparency support
+- ✅ Progress tracking and error handling
+
+**3. Post-Process Existing Images:**
+```bash
+# Remove backgrounds from already-generated images
+python remove_backgrounds.py --directory ./images/
+
+# Or with chroma key
+python remove_backgrounds.py --chroma-key "#00FF00" image.png
+```
+- ✅ AI-powered removal with rembg
+- ✅ Chroma key color removal
+- ✅ Batch directory processing
+
+**See `scripts/README.md` for complete documentation and examples.**
 
 **Requirements:**
 ```bash
-pip install rembg requests
+pip install rembg requests Pillow
 ```
-
-If rembg is not installed, the script will save with green background and provide manual removal instructions.
 
 **Post-Processing Background Removal:**
 
