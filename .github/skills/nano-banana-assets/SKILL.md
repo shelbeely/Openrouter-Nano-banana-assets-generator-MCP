@@ -76,7 +76,61 @@ When users need transparency, use a **bright chroma key color** that can be easi
 - ✅ Chroma key removal is cleaner than edge detection
 - ✅ Works perfectly with standard video/photo editing workflows
 
-**Post-Processing Chroma Key Removal:**
+**Post-Processing Background Removal:**
+
+**Recommended: Using rembg (AI-powered removal)**
+
+The **rembg** tool provides automated, high-quality background removal that works with any background color (including chroma key backgrounds):
+
+1. **Install rembg:**
+   ```bash
+   pip install rembg[gpu]  # For GPU acceleration
+   # or
+   pip install rembg       # CPU only
+   ```
+
+2. **Remove background (single file):**
+   ```bash
+   rembg i input.png output.png
+   ```
+
+3. **Batch process all files:**
+   ```bash
+   # Process all PNG files in directory
+   for file in *.png; do
+     rembg i "$file" "transparent_$file"
+   done
+   
+   # Or use rembg's built-in batch processing
+   rembg p input_folder output_folder
+   ```
+
+4. **Python API (for integration):**
+   ```python
+   from rembg import remove
+   from PIL import Image
+   
+   input_path = 'input.png'
+   output_path = 'output.png'
+   
+   with open(input_path, 'rb') as i:
+       with open(output_path, 'wb') as o:
+           input_data = i.read()
+           output_data = remove(input_data)
+           o.write(output_data)
+   ```
+
+**Why rembg is Best:**
+- ✅ AI-powered edge detection (U²-Net model)
+- ✅ Works with any background color (chroma key or natural)
+- ✅ High-quality results with fine details (hair, fur, transparent objects)
+- ✅ Fully automated - no manual selection needed
+- ✅ Fast batch processing
+- ✅ Open source and free
+
+**Alternative: Manual Chroma Key Removal**
+
+If you prefer manual control or don't want to install rembg:
 
 1. **Using ImageMagick (CLI):**
    ```bash
@@ -103,32 +157,29 @@ When users need transparency, use a **bright chroma key color** that can be easi
    ffmpeg -i input.png -filter_complex "colorkey=0x00FF00:0.3:0.2" output.png
    ```
 
-**Alternative Approaches (Not Recommended):**
+**Not Recommended:**
 
 1. **Plain White/Gray Backgrounds:**
    - ⚠️ Harder to remove if subject has similar colors
    - Requires more manual editing around edges
-   - Example: "Clean white background"
 
 2. **Request "Transparent" (Avoid):**
    - ❌ Creates fake checkered patterns painted as pixels
    - ❌ Very difficult to remove cleanly
-   - ❌ Not a true transparency solution
 
 **What to Tell Users:**
 ```
 Note: Generated images have solid backgrounds (RGB PNG format). 
 The model cannot create true transparent backgrounds (RGBA). 
 
-For clean transparency removal, I've used a bright green (#00FF00) chroma key 
-background that you can easily remove with:
-- ImageMagick: convert image.png -fuzz 5% -transparent "#00FF00" output.png
-- Photoshop: Select → Color Range → Delete
-- GIMP: Colors → Color to Alpha
-- Online tools: remove.bg, photoscissors.com
+For transparency removal, I recommend using rembg (AI-powered):
+  pip install rembg
+  rembg i input.png output.png
 
-This chroma key approach avoids the "fake checkered pattern" issue and provides 
-much cleaner results than white background removal.
+Or for manual chroma key removal with the bright green (#00FF00) background:
+  convert image.png -fuzz 5% -transparent "#00FF00" output.png
+
+The chroma key approach avoids the "fake checkered pattern" issue.
 ```
 
 ## Core Capabilities
