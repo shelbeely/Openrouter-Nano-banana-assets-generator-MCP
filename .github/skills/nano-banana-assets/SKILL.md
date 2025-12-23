@@ -20,14 +20,19 @@ This skill enables AI agents to generate high-quality web assets using OpenRoute
 Nano Banana Pro is Google's most advanced image-generation and editing model, built on Gemini 3 Pro. It extends the original Nano Banana with significantly improved multimodal reasoning, real-world grounding, and high-fidelity visual synthesis.
 
 **Key Features:**
-- **Identity Preservation**: Maintains consistency across up to 5 subjects/reference images
-- **Multi-Image Blending**: Consistent style across multiple generations
-- **Text Rendering**: Industry-leading text placement in images with multilingual layouts
+- **Multi-Image Support**: Can blend and edit up to **14 reference images** per request
+- **Identity Preservation**: Maintains consistency across up to **5 distinct subjects/characters** simultaneously
+- **Multi-Image Blending**: Consistent style across multiple generations with superior quality
+- **Text Rendering**: Industry-leading text placement in images (94-96% accuracy) with multilingual layouts
 - **Fine-Grained Controls**: Localized edits, lighting adjustments, focus control, camera transformations
-- **Flexible Outputs**: Support for 2K/4K outputs and multiple aspect ratios
+- **Flexible Outputs**: Support for 2K/4K outputs and multiple aspect ratios (1:1, 16:9, 9:16, 4:3, 21:9, etc.)
 - **Context-Rich Graphics**: From infographics and diagrams to cinematic composites
+- **Conversational Editing**: Iterative, multi-turn editing workflows for refinement
 
-**Important**: For generating more than 5 images with consistent style, this skill uses a **sliding window technique** (detailed in section 5 below) to work around the 5-image reference limit while maintaining visual consistency across larger series.
+**Understanding Image Limits:**
+- **Reference Images**: You can include up to 14 reference images in a single API request
+- **Identity Subjects**: The model can maintain consistency for up to 5 different characters/subjects within those references
+- **Series Generation**: For generating series of many images (10+, 20+, 50+), use the **sliding window technique** (detailed in section 5 below) to maintain visual consistency across the entire collection by using the most recent 5-14 generated images as references for each new image.
 
 ## Core Capabilities
 
@@ -338,15 +343,15 @@ I have 4 assets to analyze. Please review them for consistency.
 
 ### 5. Generate Consistent Series (More than 5 Images)
 
-Use this when the user needs to generate **more than 5 images** that must maintain consistency across the entire series.
+Use this when the user needs to generate **a large series of images** (10+, 20+, 50+) that must maintain consistency across the entire series.
 
-**Background**: Nano Banana Pro supports accurate identity preservation across up to 5 subjects/reference images. For series larger than 5 images, use a **sliding window approach** where you use the last 5 generated images as references for each new image.
+**Background**: Nano Banana Pro can process up to **14 reference images** per request and maintain identity for up to **5 distinct subjects/characters**. For generating extensive series (many more images than can be used as references), use a **sliding window approach** where you use the most recent 5-14 generated images as references for each new image.
 
 **When to use:**
-- User asks for "10 icons in the same style"
-- User wants "a storyboard with 8 frames"
-- User needs "12 social media posts with consistent branding"
-- User requests any image series with more than 5 items
+- User asks for "20+ icons in the same style"
+- User wants "a storyboard with 15+ frames"
+- User needs "30-day social media calendar with consistent branding"
+- User requests any extensive image series (icon libraries, product catalogs, etc.)
 
 **Steps:**
 
@@ -357,7 +362,7 @@ Use this when the user needs to generate **more than 5 images** that must mainta
      - Brand guidelines and style requirements
      - Color palette
      - Aspect ratio and resolution
-     - Any initial reference images or logo
+     - Any initial reference images or logo (up to 14 images)
 
 2. **Generate First Image**:
    - Use any initial reference images provided
@@ -365,9 +370,10 @@ Use this when the user needs to generate **more than 5 images** that must mainta
    - This establishes the baseline style
 
 3. **Generate Subsequent Images (Sliding Window)**:
-   - For images 2-5: Use ALL previously generated images as references
-   - For image 6 onwards: Use only the LAST 5 generated images as references
-   - This maintains consistency while respecting the model's 5-image limit
+   - For images 2-14: Use ALL previously generated images as references (accumulating)
+   - For image 15 onwards: Use only the LAST 10-14 generated images as references (sliding window)
+   - This maintains consistency while respecting the model's 14-image reference limit
+   - Recommended: Use 10-12 recent images to leave room for logo/initial references
 
 4. **Workflow Pattern**:
 
@@ -398,26 +404,35 @@ Use this when the user needs to generate **more than 5 images** that must mainta
    IMPORTANT: The reference images show the previously generated images in this series. Match their style, tone, and visual identity exactly while creating this new variation.
    ```
    
-   b. Prepare reference images:
+   b. Prepare reference images (up to 14 total):
    ```
    reference_images = []
    
-   # Add logo if provided
+   # Add logo if provided (takes 1 slot)
    if logo_file:
        reference_images.append(logo_file)
    
-   # Add initial references only for first image
+   # Add initial style references only for first image (up to 3-5 slots)
    if current_image == 1 and initial_references:
-       reference_images.extend(initial_references)
+       reference_images.extend(initial_references[:5])  # Limit to first 5
    
-   # Add previously generated images (sliding window)
+   # Add previously generated images (sliding window approach)
    if generated_images:
-       # Take last 5 images
-       start_index = max(0, len(generated_images) - 5)
-       reference_images.extend(generated_images[start_index:])
+       # Calculate how many slots remain (max 14 total)
+       remaining_slots = 14 - len(reference_images)
+       
+       # For images 2-14: Use all previous images (if they fit)
+       if current_image <= 14:
+           reference_images.extend(generated_images[:remaining_slots])
+       else:
+           # For image 15+: Use last 10-12 images (sliding window)
+           # Keep 2-4 slots for logo and initial references
+           window_size = min(remaining_slots, 12)
+           start_index = max(0, len(generated_images) - window_size)
+           reference_images.extend(generated_images[start_index:])
    ```
    
-   c. Make API call with reference images
+   c. Make API call with reference images (max 14)
    
    d. Store the generated image for use in next iteration
    
@@ -428,22 +443,20 @@ Use this when the user needs to generate **more than 5 images** that must mainta
    - Indicate which images were used as references
    - Confirm consistency across the series
 
-**Example workflow for 8-icon series:**
+**Example workflow for 20-icon series:**
 
 ```
-User Request: "Create 8 minimalist icons for a productivity app: home, calendar, tasks, notes, settings, profile, notifications, help"
+User Request: "Create 20 minimalist weather icons with consistent style"
 
 Your Workflow:
 
-Step 1: Generate Icon 1 (Home)
+Step 1: Generate Icon 1 (Sunny)
 ---
-Prompt: "Generate icon 1 of 8 for this series:
+Prompt: "Generate icon 1 of 20 for this series:
 
-Series Context: Minimalist icon set for productivity app. Clean lines, modern design, consistent stroke weight, monochrome style suitable for both light and dark interfaces.
+Series Context: Weather icon set with minimalist design. Clean lines, modern style, consistent 2px stroke weight, rounded line caps, monochrome design (#2D3748) on transparent background.
 
-This Image: Home icon - house symbol representing the main dashboard
-
-Brand Guidelines: Minimalist, professional, 2px stroke weight, rounded line caps, #2D3748 color on transparent background
+This Image: Sunny weather - sun with rays
 
 Aspect Ratio: 1:1
 Resolution: 512x512
@@ -453,92 +466,95 @@ Consistency Requirements:
 - Modern and polished appearance
 - Clean, simple design with consistent visual language"
 
-References: [initial reference images if any, logo if any]
+References: [initial style guide images if any, logo if any]
 [Make API call]
 [Store generated icon 1]
 
-Step 2: Generate Icon 2 (Calendar)
+Step 2: Generate Icon 2 (Cloudy)
 ---
-Prompt: "Generate icon 2 of 8 for this series:
+Prompt: "Generate icon 2 of 20 for this series:
 
-Series Context: Minimalist icon set for productivity app. Clean lines, modern design, consistent stroke weight, monochrome style.
+Series Context: Weather icon set with minimalist design, matching the previous icon's stroke weight and design language.
 
-This Image: Calendar icon - calendar grid representing scheduling
-
-Brand Guidelines: Minimalist, professional, 2px stroke weight, rounded line caps, #2D3748 color on transparent background
+This Image: Cloudy weather - cloud shape
 
 Consistency Requirements:
 - Maintain the same visual style as the reference images
-- Use consistent design language, color treatment, and composition
-- Ensure this icon feels like part of the same cohesive series
+- Use consistent design language, stroke weight, line caps
+- Ensure this icon feels like part of the same icon family
 
-IMPORTANT: The reference images show the previously generated icons in this series. Match their style, tone, and visual identity exactly while creating this new variation."
+IMPORTANT: The reference images show the previously generated icons. Match their style exactly."
 
 References: [logo if any, icon 1]
 [Make API call]
 [Store generated icon 2]
 
-Step 3-5: Generate Icons 3, 4, 5
+Steps 3-14: Generate Icons 3-14
 ---
-Same process, using all previously generated icons as references
-References for icon 3: [logo, icon 1, icon 2]
-References for icon 4: [logo, icon 1, icon 2, icon 3]
-References for icon 5: [logo, icon 1, icon 2, icon 3, icon 4]
+Same process, accumulating all previous icons as references
+- Icon 3 references: [logo, icons 1-2]
+- Icon 4 references: [logo, icons 1-3]
+- Icon 5 references: [logo, icons 1-4]
+...
+- Icon 14 references: [logo, icons 1-13] (at or near 14-image limit)
 
-Step 6: Generate Icon 6 (Profile) - SLIDING WINDOW STARTS
+Step 15: Generate Icon 15 (Heavy Rain) - SLIDING WINDOW STARTS
 ---
-Prompt: [same structure as above]
+Prompt: [same structure emphasizing consistency]
 
-References: [logo, icon 2, icon 3, icon 4, icon 5] ← Only last 5 (or 4 + logo)
+References: [logo, icons 4-14] ← Last 11 icons (11 + 1 logo = 12 references)
 [Make API call]
-[Store generated icon 6]
+[Store generated icon 15]
 
-Step 7: Generate Icon 7 (Notifications)
+Steps 16-20: Generate Icons 16-20
 ---
-References: [logo, icon 3, icon 4, icon 5, icon 6] ← Sliding window
-[Make API call]
-[Store generated icon 7]
-
-Step 8: Generate Icon 8 (Help)
----
-References: [logo, icon 4, icon 5, icon 6, icon 7] ← Sliding window
-[Make API call]
+Continue with sliding window:
+- Icon 16 references: [logo, icons 5-15]
+- Icon 17 references: [logo, icons 6-16]
+- Icon 18 references: [logo, icons 7-17]
+- Icon 19 references: [logo, icons 8-18]
+- Icon 20 references: [logo, icons 9-19] ← Last 11 + logo
 [Store generated icon 8]
 
 Final Response:
-"✅ Generated 8 consistent icons for your productivity app!
+Final Response:
+"✅ Generated 20 consistent weather icons!
 
 Icons created with sliding window consistency:
-1. Home - baseline style established
-2. Calendar - matched icon 1
-3. Tasks - matched icons 1-2
-4. Notes - matched icons 1-3
-5. Settings - matched icons 1-4
-6. Profile - matched icons 2-5 (sliding window)
-7. Notifications - matched icons 3-6 (sliding window)
-8. Help - matched icons 4-7 (sliding window)
+- Icons 1-14: Each new icon referenced all previous icons (accumulating references)
+- Icons 15-20: Each used the last 11 icons + logo (sliding window of 12 references)
 
-All icons maintain consistent style, stroke weight, and visual language throughout the series."
+Consistency maintained throughout:
+- Same stroke weight (2px)
+- Same line caps (rounded)
+- Same color (#2D3748)
+- Same minimalist style
+- Cohesive visual family
 
-[Present all 8 icons]
+All 20 icons maintain perfect consistency across the entire series!"
+
+[Present all 20 icons]
 ```
 
 **Key Points:**
 
-- **Sliding window**: Use last 5 images as references when you have more than 5
+- **14-image reference limit**: Model can process up to 14 reference images per request
+- **Sliding window**: Use last 10-14 images as references for extensive series
+- **5 subject identities**: Model maintains consistency for up to 5 different characters/subjects
 - **Explicit instructions**: Tell the model the reference images are from the same series
-- **Consistency emphasis**: Emphasize matching style, tone, and identity
+- **Consistency emphasis**: Emphasize matching style, tone, and identity in every prompt
 - **Series context**: Always include the overall series description
 - **Track progress**: Keep track of which images are used as references
 - **Quality control**: After generation, visually verify consistency
 
 **Common Use Cases:**
-- Large icon sets (10+, 20+, 50+ icons)
-- Storyboards with many frames (8-16 frames)
-- Social media calendar (30 days of posts)
-- Product catalog (multiple product variations)
-- UI component libraries (many components)
-- Brand asset collections (extensive asset sets)
+- Large icon sets (20+, 50+, 100+ icons)
+- Storyboards with many frames (15-30+ frames)
+- Social media calendar (30-90 days of posts)
+- Product catalog (extensive product variations)
+- UI component libraries (complete design systems)
+- Brand asset collections (comprehensive asset libraries)
+- Character variations (same character in different poses/scenes)
 
 ## API Call Format
 

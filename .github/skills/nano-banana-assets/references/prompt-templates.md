@@ -476,64 +476,73 @@ IMPORTANT: The reference images show the previously generated images in this ser
 ### Reference Image Strategy
 
 ```python
-# Pseudocode for sliding window approach
+# Pseudocode for sliding window approach (up to 14 reference images)
 generated_images = []
 
 for i in range(total_images):
     references = []
     
-    # Add logo if exists
+    # Add logo if exists (takes 1 slot)
     if logo:
         references.append(logo)
     
-    # For first image only, add initial reference images
+    # For first image only, add initial style reference images (up to 5 slots)
     if i == 0 and initial_references:
-        references.extend(initial_references)
+        references.extend(initial_references[:5])  # Limit to prevent overflow
     
     # Add previously generated images (sliding window)
     if generated_images:
-        # Take last 5 images (or 4 if logo takes 1 slot)
-        max_refs = 4 if logo else 5
-        start_idx = max(0, len(generated_images) - max_refs)
-        references.extend(generated_images[start_idx:])
+        # Calculate remaining slots (max 14 total)
+        remaining_slots = 14 - len(references)
+        
+        # For images 2-14: Accumulate all previous images (if they fit)
+        if i < 14:
+            references.extend(generated_images[:remaining_slots])
+        else:
+            # For image 15+: Use sliding window (last 10-12 images)
+            window_size = min(remaining_slots, 12)
+            start_idx = max(0, len(generated_images) - window_size)
+            references.extend(generated_images[start_idx:])
     
-    # Generate image with references
+    # Generate image with up to 14 references
     new_image = generate(prompt, references)
     generated_images.append(new_image)
 ```
 
-### Example: 10-Icon Weather Set
+### Example: 20-Icon Weather Set
 
 ```
 [Icon 1 - Sunny]
-Prompt: Generate icon 1 of 10 for weather icon series...
+Prompt: Generate icon 1 of 20 for weather icon series...
 References: [initial style guide if any]
 → Generate and store
 
 [Icon 2 - Cloudy]
-Prompt: Generate icon 2 of 10 for weather icon series...
+Prompt: Generate icon 2 of 20 for weather icon series...
        IMPORTANT: Match style of reference image exactly.
 References: [Icon 1]
 → Generate and store
 
-[Icons 3-5]
+[Icons 3-14]
 Same pattern, accumulating references
-Icon 3: [Icon 1, Icon 2]
-Icon 4: [Icon 1, Icon 2, Icon 3]
-Icon 5: [Icon 1, Icon 2, Icon 3, Icon 4]
+Icon 3: [Icons 1-2]
+Icon 4: [Icons 1-3]
+...
+Icon 14: [Icons 1-13] (at 14-image limit)
 
-[Icon 6 - Windy] ← Sliding window starts
-Prompt: Generate icon 6 of 10 for weather icon series...
+[Icon 15 - Heavy Rain] ← Sliding window starts
+Prompt: Generate icon 15 of 20 for weather icon series...
        IMPORTANT: Match style of reference images exactly.
-References: [Icon 2, Icon 3, Icon 4, Icon 5]
+References: [Icons 4-14] (last 11 icons, 11 references)
 → Generate and store
 
-[Icons 7-10]
+[Icons 16-20]
 Continue sliding window:
-Icon 7: [Icon 3, Icon 4, Icon 5, Icon 6]
-Icon 8: [Icon 4, Icon 5, Icon 6, Icon 7]
-Icon 9: [Icon 5, Icon 6, Icon 7, Icon 8]
-Icon 10: [Icon 6, Icon 7, Icon 8, Icon 9]
+Icon 16: [Icons 5-15]
+Icon 17: [Icons 6-16]
+Icon 18: [Icons 7-17]
+Icon 19: [Icons 8-18]
+Icon 20: [Icons 9-19] (last 11 icons)
 ```
 
 ### Key Success Factors
@@ -541,9 +550,10 @@ Icon 10: [Icon 6, Icon 7, Icon 8, Icon 9]
 1. **Sequential Generation**: Generate one at a time, not in batch
 2. **Explicit Instructions**: Always emphasize "match the style exactly"
 3. **Consistent Prompts**: Use the same structure and wording for all prompts
-4. **Reference Management**: Track which images to use as references
-5. **Style Anchoring**: Include series context in every prompt
-6. **Quality Verification**: Check each image before proceeding to next
+4. **Reference Management**: Track which images to use as references (max 14)
+5. **Window Size**: Use 10-12 recent images for sliding window (leaves room for logo/initial refs)
+6. **Style Anchoring**: Include series context in every prompt
+7. **Quality Verification**: Check each image before proceeding to next
 
 ---
 
