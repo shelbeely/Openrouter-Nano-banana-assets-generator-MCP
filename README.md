@@ -1,5 +1,7 @@
 # OpenRouter Nano Banana Pro Assets Generator
 
+✅ **SKILL VERIFIED & READY TO USE!** - [Quick Start Guide](./SKILL_READY.md)
+
 A powerful asset generation solution that leverages OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview) for professional web asset generation and editing.
 
 Available as both a **Model Context Protocol (MCP) server** and a **GitHub Copilot Agent Skill** (following the official GitHub specification).
@@ -383,6 +385,13 @@ The Agent Skill is ready to use - no build step required! To modify:
 
 ## Documentation
 
+### 🎯 Getting Started (NEW!)
+- **[✨ Skill Ready Guide](./SKILL_READY.md)** - Verification summary and quick start
+- **[📚 Skill Usage Demo](./SKILL_USAGE_DEMO.md)** - Comprehensive usage examples
+- **[✅ Skill Verification](./SKILL_VERIFICATION.md)** - Testing and verification details
+- **[🔧 Test Scripts](./examples/)** - Local testing examples
+
+### Complete Guides
 - **[Agent Skill Documentation](./nano-banana-assets-skill/README.md)** - Complete guide to using the Agent Skill
 - **[Quick Start Guide](./QUICKSTART.md)** - Get started quickly with MCP server
 - **[Examples](./EXAMPLES.md)** - Detailed usage examples
