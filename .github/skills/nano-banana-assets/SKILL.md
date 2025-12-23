@@ -49,37 +49,86 @@ Nano Banana Pro is Google's most advanced image-generation and editing model, bu
 
 **Implications for Agents:**
 - ❌ **Do NOT promise users transparent backgrounds** or alpha channel support
-- ❌ **Do NOT include "transparent background" in prompts** - it will be misinterpreted
-- ✅ **DO specify a solid background color** instead (e.g., "white background", "solid light gray background")
+- ❌ **Do NOT include "transparent background" in prompts** - it creates fake checkered patterns
+- ✅ **DO use chroma key colors** for easy background removal (#00FF00 bright green recommended)
 - ✅ **DO inform users** that post-processing is needed for true transparency
 
-**Alternative Approaches:**
+**Recommended Approach: Chroma Key Backgrounds**
 
-1. **Request Solid Backgrounds:**
+When users need transparency, use a **bright chroma key color** that can be easily removed:
+
+**Best Chroma Key Colors:**
+1. **Bright Green (#00FF00)** - Most common, rarely appears in subjects
+2. **Bright Magenta (#FF00FF)** - Alternative if subject contains green
+3. **Bright Blue (#0000FF)** - For subjects with green/magenta elements
+
+**Example Prompts:**
+```
+- "Solid bright green background (#00FF00) for chroma key removal"
+- "Pure #00FF00 green background, flat and uniform"
+- "Subject isolated on solid bright green (#00FF00) chroma key background"
+```
+
+**Why This Works:**
+- ✅ Model generates clean, uniform color fills
+- ✅ No fake checkered patterns painted as pixels
+- ✅ Easy to select and remove using color-based tools
+- ✅ Chroma key removal is cleaner than edge detection
+- ✅ Works perfectly with standard video/photo editing workflows
+
+**Post-Processing Chroma Key Removal:**
+
+1. **Using ImageMagick (CLI):**
+   ```bash
+   # Remove bright green background with tolerance
+   convert input.png -fuzz 5% -transparent "#00FF00" output.png
+   
+   # Batch process all files
+   for file in *.png; do
+     convert "$file" -fuzz 5% -transparent "#00FF00" "transparent_$file"
+   done
    ```
-   - "Clean white background"
-   - "Solid light gray background (#F5F5F5)"
-   - "Pure black background for dark mode"
+
+2. **Using Photoshop:**
+   - Select → Color Range → Sample the green background
+   - Adjust tolerance as needed
+   - Delete selection → Save as PNG with transparency
+
+3. **Using GIMP:**
+   - Colors → Color to Alpha → Select the green (#00FF00)
+   - Export as PNG with alpha channel
+
+4. **Using FFmpeg (for batch):**
+   ```bash
+   ffmpeg -i input.png -filter_complex "colorkey=0x00FF00:0.3:0.2" output.png
    ```
 
-2. **Post-Processing for Transparency (User's Responsibility):**
-   - Use image editing tools (Photoshop, GIMP, remove.bg, etc.)
-   - Apply background removal algorithms
-   - Convert RGB to RGBA and set alpha channel
-   - Example CLI tool: `convert input.png -fuzz 10% -transparent white output.png`
+**Alternative Approaches (Not Recommended):**
 
-3. **Design for Solid Backgrounds:**
-   - For stickers/icons, use solid color backgrounds matching the intended use case
-   - For web assets, design with the target background color in mind
-   - Use drop shadows or borders to separate subject from background
+1. **Plain White/Gray Backgrounds:**
+   - ⚠️ Harder to remove if subject has similar colors
+   - Requires more manual editing around edges
+   - Example: "Clean white background"
+
+2. **Request "Transparent" (Avoid):**
+   - ❌ Creates fake checkered patterns painted as pixels
+   - ❌ Very difficult to remove cleanly
+   - ❌ Not a true transparency solution
 
 **What to Tell Users:**
 ```
 Note: Generated images have solid backgrounds (RGB PNG format). 
 The model cannot create true transparent backgrounds (RGBA). 
-If you need transparency, you'll need to:
-1. Use background removal tools post-generation, or
-2. Specify a solid background color that matches your use case
+
+For clean transparency removal, I've used a bright green (#00FF00) chroma key 
+background that you can easily remove with:
+- ImageMagick: convert image.png -fuzz 5% -transparent "#00FF00" output.png
+- Photoshop: Select → Color Range → Delete
+- GIMP: Colors → Color to Alpha
+- Online tools: remove.bg, photoscissors.com
+
+This chroma key approach avoids the "fake checkered pattern" issue and provides 
+much cleaner results than white background removal.
 ```
 
 ## Core Capabilities
@@ -559,7 +608,7 @@ Step 1: Generate Icon 1 (Sunny)
 ---
 Prompt: "Generate icon 1 of 20 for this series:
 
-Series Context: Weather icon set with minimalist design. Clean lines, modern style, consistent 2px stroke weight, rounded line caps, monochrome design (#2D3748) on white background.
+Series Context: Weather icon set with minimalist design. Clean lines, modern style, consistent 2px stroke weight, rounded line caps, monochrome design (#2D3748) on solid bright green (#00FF00) chroma key background for easy removal.
 
 This Image: Sunny weather - sun with rays
 
@@ -1051,17 +1100,17 @@ API Request:
 Subject: Simple house silhouette with pitched roof and centered door, clean geometric shape
 Composition: Centered in frame, balanced proportions, suitable for small sizes
 Action: Static, stable presentation representing home/safety
-Location: Isolated on clean white background, no environmental context
+Location: Isolated on solid bright green (#00FF00) chroma key background, no environmental context
 Style: Minimalist line art, modern flat design, professional and recognizable
 Lighting: Even lighting, no shadows, clean silhouette optimized for UI
 
 Technical Specifications:
 - Aspect Ratio: 1:1
 - Resolution: 512x512
-- Color: Single color (#2D3748) on white background
+- Color: Single color (#2D3748) on bright green (#00FF00) chroma key background
 - Format: Clean vector-style appearance
 
-Note: For transparency, apply background removal in post-processing
+Note: Use chroma key removal for transparency: convert image.png -fuzz 5% -transparent "#00FF00" output.png
 
 Requirements:
 - Professional and instantly recognizable
@@ -1198,12 +1247,12 @@ Series Overview (applies to all icons):
 - Subject: Weather symbols in minimalist line art style
 - Composition: Centered, balanced, circular-safe design
 - Action: Static, iconic representation
-- Location: Isolated on clean white background
+- Location: Isolated on solid bright green (#00FF00) chroma key background
 - Style: Modern minimalist, clean line art, 2px stroke weight, rounded line caps
 - Lighting: Even, no shadows, optimized for UI usage
 - Color: Monochrome #2D3748
 - Technical: 1:1 aspect ratio, 512x512 resolution
-- Note: Apply background removal in post-processing if transparency needed
+- Note: Chroma key background allows easy removal with: convert image.png -fuzz 5% -transparent "#00FF00" output.png
 
 [Icon 1 - Sunny]
 API Request using Six-Element Framework:
@@ -1211,11 +1260,11 @@ API Request using Six-Element Framework:
 Subject: Sun symbol - circular center with evenly spaced rays (8 rays radiating outward)
 Composition: Perfectly centered, balanced radial symmetry
 Action: Static, stable representation of sunshine
-Location: Isolated on clean white background, no context
+Location: Isolated on solid bright green (#00FF00) chroma key background, no context
 Style: Minimalist line art, 2px stroke weight, rounded line caps, modern and clean
 Lighting: Even illumination, no shadows, pure line work
 
-Technical: 1:1, 512x512, #2D3748 on white background
+Technical: 1:1, 512x512, #2D3748 on bright green (#00FF00) chroma key background
 This is icon 1 of 10 in weather icon series - establishing baseline style
 
 References: None (establishing baseline)
@@ -1227,7 +1276,7 @@ API Request:
 Subject: Cloud shape - rounded, fluffy cloud form with smooth curves
 Composition: Centered, following same centered approach as icon 1
 Action: Static cloud representation
-Location: Isolated on white background, matching icon 1 treatment
+Location: Isolated on bright green (#00FF00) chroma key background, matching icon 1 treatment
 Style: Match icon 1's minimalist line art exactly, same 2px stroke, rounded caps
 Lighting: Even, matching icon 1's treatment
 
@@ -1266,7 +1315,7 @@ API Request:
 Subject: Wind lines showing air movement, curved flowing lines
 Composition: Centered following established pattern
 Action: Suggests movement while remaining iconic
-Location: Isolated on white background, consistent with series
+Location: Isolated on bright green (#00FF00) chroma key background, consistent with series
 Style: Match established minimalist line art, 2px stroke, rounded caps
 Lighting: Even, no shadows
 
