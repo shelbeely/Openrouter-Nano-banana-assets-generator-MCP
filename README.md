@@ -23,6 +23,16 @@ This project enables AI assistants to generate high-quality web assets, asset pa
 - 📐 **Flexible Formats**: Multiple aspect ratios (1:1, 16:9, 9:16, 21:9, etc.) and resolutions (up to 4K)
 - 🌐 **Web-Optimized**: Assets designed specifically for web development workflows
 
+## 🔑 Required: OpenRouter API Key
+
+This skill requires an OpenRouter API key to function. Get yours at [openrouter.ai](https://openrouter.ai/).
+
+**For GitHub Copilot coding agent:** Add your API key as a **repository secret** named `OPENROUTER_API_KEY`.  
+→ [Setup Instructions](./GITHUB_COPILOT_ENV_SETUP.md)
+
+**For local development:** Set the `OPENROUTER_API_KEY` environment variable.  
+→ [Setup Instructions](./OPENROUTER_API_KEY_SETUP.md)
+
 ## Quick Start
 
 Choose your preferred method:
@@ -31,31 +41,46 @@ Choose your preferred method:
 
 The **GitHub Copilot Agent Skill** is automatically loaded by GitHub Copilot when you need asset generation.
 
-1. **Set your API key** (one-time setup):
-   ```bash
-   # Run the interactive setup script
-   ./setup-api-key.sh
-   
-   # Or manually set it
-   export OPENROUTER_API_KEY="your-api-key-here"
-   ```
-   
-   📖 **[Detailed API Key Setup Guide →](./OPENROUTER_API_KEY_SETUP.md)**
+#### For GitHub Copilot Coding Agent
 
-2. **Use with GitHub Copilot**:
+1. **Add your API key as a repository secret**:
+   - Go to: **Settings** → **Secrets and variables** → **Actions**
+   - Click **New repository secret**
+   - Name: `OPENROUTER_API_KEY`
+   - Value: Your OpenRouter API key from [openrouter.ai](https://openrouter.ai/)
    
-   Just ask naturally in VS Code, CLI, or coding agent:
+   📖 **[GitHub Copilot Environment Setup →](./GITHUB_COPILOT_ENV_SETUP.md)**
+
+2. **Use with GitHub Copilot coding agent**:
+   
+   Just ask naturally when working on a PR or in your repository:
    ```
    "Generate a modern home icon for my website"
    "Create a hero banner with blue and purple gradient"
    "I need a social media kit for my brand"
    ```
    
-   GitHub Copilot automatically uses the skill in `.github/skills/nano-banana-assets/`!
+   Copilot automatically:
+   - Runs `.github/workflows/copilot-setup-steps.yml`
+   - Loads your API key from secrets
+   - Uses the skill in `.github/skills/nano-banana-assets/`
+   - Generates your assets!
 
-3. **Verify it works**:
+#### For Local Development / VS Code
+
+1. **Set your API key locally**:
    ```bash
-   # Test the skill directly
+   # Run the interactive setup script
+   ./setup-api-key.sh
+   
+   # Or manually set it in your shell
+   export OPENROUTER_API_KEY="your-api-key-here"
+   ```
+   
+   📖 **[Local API Key Setup →](./OPENROUTER_API_KEY_SETUP.md)**
+
+2. **Test the skill**:
+   ```bash
    cd .github/skills/nano-banana-assets/scripts
    python generate_asset.py "Test icon" "1:1" "512x512"
    ```
