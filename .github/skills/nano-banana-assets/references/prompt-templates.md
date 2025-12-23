@@ -1,65 +1,107 @@
 # Prompt Templates and Examples
 
-This document provides tested prompt templates for various asset generation scenarios.
+This document provides tested prompt templates based on **Google's Six-Element Framework** for optimal results with Gemini/Nano Banana Pro.
+
+## Understanding the Six-Element Framework
+
+Google's research shows that structuring prompts around six core elements produces the best image generation results:
+
+1. **Subject** - Who/what is in the image
+2. **Composition** - Framing, perspective, layout
+3. **Action** - What is happening
+4. **Location** - Setting, environment, context
+5. **Style** - Overall aesthetic approach
+6. **Lighting** - Illumination details and mood
+
+**Optional enhancements:**
+- **Camera Details** - Lens, focal length, depth of field
+- **Materiality** - Textures, surface qualities
 
 ## Icon Generation
 
 ### Minimalist Icon
 ```
-Generate a minimalist [ICON_TYPE] icon for a website.
+Generate a minimalist [ICON_TYPE] icon for a website using the Six-Element Framework:
 
-Style: Clean, simple lines, modern design
-Format: Single color or minimal color palette
+Subject: [Describe the icon element - e.g., "Simple house silhouette with pitched roof"]
+Composition: Centered in frame, balanced proportions, suitable for small sizes (24-128px)
+Action: Static, stable iconic representation
+Location: Isolated on transparent background, no environmental context
+Style: Minimalist line art, modern flat design, clean geometric shapes
+Lighting: Even lighting, no shadows, optimized for UI usage
+
+Camera & Materiality: N/A for flat icon design
+
+Technical Specifications:
+Colors: [COLOR_PALETTE] - typically single color or minimal palette
+Aspect Ratio: 1:1 (square)
+Resolution: 512x512 (or as specified)
 Background: Transparent preferred
-Size: Suitable for use as a navigation/UI icon
-Colors: [COLOR_PALETTE]
 
 Requirements:
-- Professional and recognizable
+- Professional and instantly recognizable
 - Works at small sizes (32px to 128px)
 - Clear silhouette
-- Web-optimized
+- Web-optimized for navigation/UI use
 ```
 
 ### Detailed Icon
 ```
-Generate a detailed [ICON_TYPE] icon with depth and dimension.
+Generate a detailed [ICON_TYPE] icon with depth and dimension using the Six-Element Framework:
 
-Style: Modern, dimensional, with subtle shadows and highlights
-Format: Multi-color with gradient accents
-Background: Transparent or subtle background
-Colors: [COLOR_PALETTE]
+Subject: [Detailed icon element with specific attributes - e.g., "Stylized camera with lens, buttons, and viewfinder"]
+Composition: Centered, slight 3/4 angle to show dimension, balanced visual weight
+Action: Static but suggesting functionality/purpose
+Location: Isolated with subtle shadow or glow for depth
+Style: Modern dimensional design with gradients and highlights, rich visual detail
+Lighting: Soft directional lighting from top-left creating subtle shadows and highlights, adds depth
+
+Camera & Materiality: 
+- Slight isometric or 3/4 perspective
+- Materials: Glossy surfaces with subtle reflections, metallic accents
+
+Technical Specifications:
+Colors: [COLOR_PALETTE] - multi-color with gradient accents
+Aspect Ratio: 1:1 (square)
+Resolution: 512x512 or higher for detail
+Background: Transparent or subtle gradient
 
 Requirements:
-- Rich visual detail
+- Rich visual detail and depth
 - Recognizable at medium to large sizes
-- Professional quality
-- App icon or feature icon style
+- Professional app icon quality
+- Dimensional, polished appearance
 ```
 
 ## Banner Generation
 
 ### Hero Banner
 ```
-Generate a modern hero banner for [PURPOSE/INDUSTRY].
+Generate a modern hero banner for [PURPOSE/INDUSTRY] using the Six-Element Framework:
 
-Scene: [SPECIFIC_SCENE_DESCRIPTION]
-Style: [Modern/Minimalist/Bold/Elegant/etc.]
-Composition: [Layout description]
-Colors: [COLOR_PALETTE]
-Elements: [List key visual elements]
-Text Space: Reserve space for [HEADLINE/CTA/etc.]
+Subject: [Describe main visual elements - e.g., "Abstract geometric shapes, flowing particles, tech elements"]
+Composition: [Layout - e.g., "Wide shot with rule of thirds, negative space on left for text, visual weight on right"]
+Action: [What's happening - e.g., "Subtle particle movement suggesting innovation, energy flowing through connecting lines"]
+Location: [Environment - e.g., "Contemporary digital space, infinite depth, cloud-like atmosphere"]
+Style: [Aesthetic - e.g., "Modern minimalist with vibrant gradients, professional SaaS aesthetic"]
+Lighting: [Illumination - e.g., "Soft ambient glow from gradient background, subtle rim lighting on geometric elements from top-right"]
 
-Technical:
-- Aspect Ratio: 16:9
-- Resolution: 1920x1080
-- Web-optimized
+Camera & Materiality:
+- Perspective: [e.g., "Slight elevated view, medium depth of field"]
+- Materials: [e.g., "Glass-like gradient surfaces, subtle metallic sheen on shapes"]
+
+Technical Specifications:
+Aspect Ratio: 16:9
+Resolution: 1920x1080
+Colors: [COLOR_PALETTE - e.g., "#667EEA (primary), #764BA2 (secondary), #F093FB (accent)"]
+Text Space: [e.g., "Reserve left third area clear for headline and CTA"]
 
 Requirements:
 - Eye-catching and professional
 - Balanced composition
 - Clear focal point
-- Suitable for hero section
+- Suitable for website hero section
+- Web-optimized
 ```
 
 ### Email Header
