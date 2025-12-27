@@ -1,25 +1,66 @@
 #!/bin/bash
 
 # Helper script to generate a single asset using OpenRouter API
-# Usage: ./generate_asset.sh "prompt" "aspect_ratio" "resolution"
+# Usage: ./generate_asset.sh "prompt" "aspect_ratio" "resolution" [--transparent]
 
 OPENROUTER_API_KEY="${OPENROUTER_API_KEY}"
 OPENROUTER_URL="https://openrouter.ai/api/v1/chat/completions"
 MODEL="google/gemini-3-pro-image-preview"
+CHROMA_KEY="#00FF00"
 
 if [ -z "$OPENROUTER_API_KEY" ]; then
     echo "Error: OPENROUTER_API_KEY environment variable is not set"
     exit 1
 fi
 
-PROMPT="${1:-Generate a professional web asset}"
-ASPECT_RATIO="${2:-1:1}"
-RESOLUTION="${3:-1080x1080}"
+# Parse arguments
+PROMPT=""
+ASPECT_RATIO="1:1"
+RESOLUTION="1080x1080"
+TRANSPARENT=false
 
-# Build the full prompt
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --transparent|-t)
+            TRANSPARENT=true
+            shift
+            ;;
+        *)
+            if [ -z "$PROMPT" ]; then
+                PROMPT="$1"
+            elif [ "$ASPECT_RATIO" = "1:1" ]; then
+                ASPECT_RATIO="$1"
+            elif [ "$RESOLUTION" = "1080x1080" ]; then
+                RESOLUTION="$1"
+            fi
+            shift
+            ;;
+    esac
+done
+
+# Set default prompt if not provided
+if [ -z "$PROMPT" ]; then
+    PROMPT="Generate a professional web asset"
+fi
+
+# Build the full prompt with or without chroma key
+if [ "$TRANSPARENT" = true ]; then
+    BACKGROUND_INSTRUCTION="Location: Isolated on solid bright green ($CHROMA_KEY) chroma key background, no environmental context
+
+IMPORTANT: The background MUST be solid bright green ($CHROMA_KEY) only.
+This is a chroma key background for automated removal - DO NOT paint checkered patterns.
+"
+    echo "🎨 Generating with chroma key background for transparency"
+else
+    BACKGROUND_INSTRUCTION="Background: Professional web background"
+fi
+
 FULL_PROMPT="Generate a high-quality web asset with the following specifications:
 
 Description: ${PROMPT}
+
+${BACKGROUND_INSTRUCTION}
 Aspect Ratio: ${ASPECT_RATIO}
 Resolution: ${RESOLUTION}
 
@@ -39,7 +80,7 @@ JSON_PAYLOAD=$(cat <<EOF
       "content": [
         {
           "type": "text",
-          "text": "${FULL_PROMPT}"
+          "text": ${FULL_PROMPT@Q}
         }
       ]
     }
@@ -59,6 +100,9 @@ echo "Generating asset..."
 echo "Prompt: ${PROMPT}"
 echo "Aspect Ratio: ${ASPECT_RATIO}"
 echo "Resolution: ${RESOLUTION}"
+if [ "$TRANSPARENT" = true ]; then
+    echo "Background: Chroma Key ($CHROMA_KEY)"
+fi
 echo ""
 
 RESPONSE=$(curl -s -X POST "${OPENROUTER_URL}" \
@@ -93,8 +137,17 @@ echo "Generated ${IMAGE_COUNT} image(s)"
 echo ""
 echo "Full response saved to response.json"
 echo ""
+
+if [ "$TRANSPARENT" = true ]; then
+    echo "💡 To remove background and create transparent PNG:"
+    echo "   python remove_backgrounds.py response_image.png"
+    echo "   or"
+    echo "   python remove_backgrounds.py --chroma-key '$CHROMA_KEY' response_image.png"
+    echo ""
+fi
+
 echo "To extract images from response.json:"
-echo "  jq -r '.choices[0].message.images[0].image_url.url' response.json > image1.txt"
+echo "  jq -r '.choices[0].message.images[0].image_url.url' response.json | sed 's/data:image\/png;base64,//' | base64 -d > image1.png"
 echo ""
 echo "Text description:"
 echo "$RESPONSE" | jq -r '.choices[0].message.content'

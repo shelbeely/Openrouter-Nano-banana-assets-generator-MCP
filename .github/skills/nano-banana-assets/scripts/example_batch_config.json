@@ -1,0 +1,32 @@
+{
+  "assets": [
+    {
+      "name": "hero_banner",
+      "prompt": "Modern tech startup hero banner with abstract geometric shapes and gradient background from blue to purple",
+      "aspect_ratio": "16:9",
+      "resolution": "1920x1080",
+      "color_palette": ["#667EEA", "#764BA2", "#F093FB"]
+    },
+    {
+      "name": "app_icon",
+      "prompt": "Minimalist app icon for a productivity application, clean geometric design",
+      "aspect_ratio": "1:1",
+      "resolution": "1024x1024",
+      "color_palette": ["#4F46E5", "#7C3AED"]
+    },
+    {
+      "name": "instagram_post",
+      "prompt": "Instagram post design for eco-friendly coffee brand with natural elements",
+      "aspect_ratio": "1:1",
+      "resolution": "1080x1080",
+      "color_palette": ["#2ECC71", "#27AE60", "#8B4513"]
+    },
+    {
+      "name": "twitter_header",
+      "prompt": "Twitter header image for tech conference, dynamic and modern design",
+      "aspect_ratio": "3:1",
+      "resolution": "1500x500",
+      "color_palette": ["#1DA1F2", "#14171A"]
+    }
+  ]
+}

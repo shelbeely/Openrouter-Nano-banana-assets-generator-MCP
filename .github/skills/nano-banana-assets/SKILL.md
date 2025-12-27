@@ -1,19 +1,29 @@
 ---
 name: nano-banana-assets
-description: Generate professional web assets, icons, banners, backgrounds, and UI elements using OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview). Use when the user needs to create or edit images, graphics, or visual assets for web development, social media, branding, or design projects.
+description: Generate any kind of visual asset using OpenRouter's Nano Banana Pro (Google Gemini 3 Pro Image Preview). Handles images, graphics, illustrations, icons, banners, backgrounds, UI elements, stickers, characters, and more. Flexible and adaptable to any creative request.
 license: MIT
 metadata:
   author: shelbeely
   version: "1.0.0"
   category: design-and-media
-  keywords: image-generation, assets, web-design, branding, openrouter, gemini
+  keywords: image-generation, assets, web-design, branding, openrouter, gemini, flexible, creative
 compatibility: Requires internet access and OpenRouter API key. Works with any agent that can make HTTP API calls.
-allowed-tools: fetch http-client curl
+allowed-tools: fetch http-client curl bash
 ---
 
 # Nano Banana Assets Generator Skill
 
-This skill enables AI agents to generate high-quality web assets using OpenRouter's Nano Banana Pro model (Google Gemini 3 Pro Image Preview). It provides professional asset generation, editing, and brand consistency management.
+This skill enables AI agents to generate **any kind of visual asset** using OpenRouter's Nano Banana Pro model (Google Gemini 3 Pro Image Preview). 
+
+**Use this skill when users request:**
+- Any image, graphic, or visual content
+- Icons, logos, banners, backgrounds, UI elements
+- Illustrations, characters, stickers, avatars
+- Product mockups, designs, compositions
+- Social media graphics, marketing materials
+- Creative artwork of any style or type
+
+**Key Philosophy:** Be flexible and creative. Adapt to the user's needs rather than forcing predefined templates.
 
 ## About Nano Banana Pro
 
@@ -34,6 +44,198 @@ Nano Banana Pro is Google's most advanced image-generation and editing model, bu
 - **Reference Images**: You can include up to 14 reference images in a single API request
 - **Identity Subjects**: The model can maintain consistency for up to 5 different characters/subjects within those references
 - **Series Generation**: For generating series of many images (10+, 20+, 50+), use the **sliding window technique** (detailed in section 5 below) to maintain visual consistency across the entire collection by using the most recent 5-14 generated images as references for each new image.
+
+## Known Limitations
+
+### ⚠️ Transparent Backgrounds Not Supported
+
+**IMPORTANT:** Nano Banana Pro (Google Gemini 3 Pro Image Preview) **does not generate images with true alpha transparency**. This is a model limitation, not a configuration issue.
+
+**What Actually Happens:**
+- Generated images are RGB PNG files (color type 2) without alpha channels
+- When you request "transparent background," the model paints a solid color or pattern
+- The background may appear white, gray, or have a checkered pattern painted as pixels
+- The resulting PNG files cannot be overlaid on other backgrounds with transparency
+
+**Implications for Agents:**
+- ❌ **Do NOT promise users transparent backgrounds** or alpha channel support
+- ❌ **Do NOT include "transparent background" in prompts** - it creates fake checkered patterns
+- ✅ **DO use chroma key colors** for easy background removal (#00FF00 bright green recommended)
+- ✅ **DO inform users** that post-processing is needed for true transparency
+
+**Recommended Approach: Chroma Key Backgrounds**
+
+When users need transparency, use a **bright chroma key color** that can be easily removed:
+
+**Best Chroma Key Colors:**
+1. **Bright Green (#00FF00)** - Most common, rarely appears in subjects
+2. **Bright Magenta (#FF00FF)** - Alternative if subject contains green
+3. **Bright Blue (#0000FF)** - For subjects with green/magenta elements
+
+**Example Prompts:**
+```
+- "Solid bright green background (#00FF00) for chroma key removal"
+- "Pure #00FF00 green background, flat and uniform"
+- "Subject isolated on solid bright green (#00FF00) chroma key background"
+```
+
+**Why This Works:**
+- ✅ Model generates clean, uniform color fills
+- ✅ No fake checkered patterns painted as pixels
+- ✅ Easy to select and remove using color-based tools
+- ✅ Chroma key removal is cleaner than edge detection
+- ✅ Works perfectly with standard video/photo editing workflows
+
+**Automated Scripts Available:**
+
+The skill includes several helper scripts in `scripts/` directory for various workflows:
+
+**1. Single Asset with Transparency (Recommended):**
+```bash
+cd .github/skills/nano-banana-assets/scripts
+python generate_with_transparency.py "Your prompt" "1:1" "1024x1024"
+```
+- ✅ Generates with #00FF00 chroma key (no fake checkered patterns)
+- ✅ Removes background with rembg (AI-powered)
+- ✅ Outputs transparent RGBA PNG files
+- ✅ Saves both transparent and original versions
+
+**2. Batch Generation:**
+```bash
+# From config file
+python batch_generate.py --config example_batch_config.json --transparent
+
+# From prompts
+python batch_generate.py --prompts "Icon 1" "Icon 2" "Icon 3" --transparent
+```
+- ✅ Generate multiple assets at once
+- ✅ Optional transparency support
+- ✅ Progress tracking and error handling
+
+**3. Post-Process Existing Images:**
+```bash
+# Remove backgrounds from already-generated images
+python remove_backgrounds.py --directory ./images/
+
+# Or with chroma key
+python remove_backgrounds.py --chroma-key "#00FF00" image.png
+```
+- ✅ AI-powered removal with rembg
+- ✅ Chroma key color removal
+- ✅ Batch directory processing
+
+**See `scripts/README.md` for complete documentation and examples.**
+
+**Requirements:**
+```bash
+pip install rembg requests Pillow
+```
+
+**Post-Processing Background Removal:**
+
+**Recommended: Using rembg (AI-powered removal)**
+
+The **rembg** tool provides automated, high-quality background removal that works with any background color (including chroma key backgrounds):
+
+1. **Install rembg:**
+   ```bash
+   pip install rembg[gpu]  # For GPU acceleration
+   # or
+   pip install rembg       # CPU only
+   ```
+
+2. **Remove background (single file):**
+   ```bash
+   rembg i input.png output.png
+   ```
+
+3. **Batch process all files:**
+   ```bash
+   # Process all PNG files in directory
+   for file in *.png; do
+     rembg i "$file" "transparent_$file"
+   done
+   
+   # Or use rembg's built-in batch processing
+   rembg p input_folder output_folder
+   ```
+
+4. **Python API (for integration):**
+   ```python
+   from rembg import remove
+   from PIL import Image
+   
+   input_path = 'input.png'
+   output_path = 'output.png'
+   
+   with open(input_path, 'rb') as i:
+       with open(output_path, 'wb') as o:
+           input_data = i.read()
+           output_data = remove(input_data)
+           o.write(output_data)
+   ```
+
+**Why rembg is Best:**
+- ✅ AI-powered edge detection (U²-Net model)
+- ✅ Works with any background color (chroma key or natural)
+- ✅ High-quality results with fine details (hair, fur, transparent objects)
+- ✅ Fully automated - no manual selection needed
+- ✅ Fast batch processing
+- ✅ Open source and free
+
+**Alternative: Manual Chroma Key Removal**
+
+If you prefer manual control or don't want to install rembg:
+
+1. **Using ImageMagick (CLI):**
+   ```bash
+   # Remove bright green background with tolerance
+   convert input.png -fuzz 5% -transparent "#00FF00" output.png
+   
+   # Batch process all files
+   for file in *.png; do
+     convert "$file" -fuzz 5% -transparent "#00FF00" "transparent_$file"
+   done
+   ```
+
+2. **Using Photoshop:**
+   - Select → Color Range → Sample the green background
+   - Adjust tolerance as needed
+   - Delete selection → Save as PNG with transparency
+
+3. **Using GIMP:**
+   - Colors → Color to Alpha → Select the green (#00FF00)
+   - Export as PNG with alpha channel
+
+4. **Using FFmpeg (for batch):**
+   ```bash
+   ffmpeg -i input.png -filter_complex "colorkey=0x00FF00:0.3:0.2" output.png
+   ```
+
+**Not Recommended:**
+
+1. **Plain White/Gray Backgrounds:**
+   - ⚠️ Harder to remove if subject has similar colors
+   - Requires more manual editing around edges
+
+2. **Request "Transparent" (Avoid):**
+   - ❌ Creates fake checkered patterns painted as pixels
+   - ❌ Very difficult to remove cleanly
+
+**What to Tell Users:**
+```
+Note: Generated images have solid backgrounds (RGB PNG format). 
+The model cannot create true transparent backgrounds (RGBA). 
+
+For transparency removal, I recommend using rembg (AI-powered):
+  pip install rembg
+  rembg i input.png output.png
+
+Or for manual chroma key removal with the bright green (#00FF00) background:
+  convert image.png -fuzz 5% -transparent "#00FF00" output.png
+
+The chroma key approach avoids the "fake checkered pattern" issue.
+```
 
 ## Core Capabilities
 
@@ -512,7 +714,7 @@ Step 1: Generate Icon 1 (Sunny)
 ---
 Prompt: "Generate icon 1 of 20 for this series:
 
-Series Context: Weather icon set with minimalist design. Clean lines, modern style, consistent 2px stroke weight, rounded line caps, monochrome design (#2D3748) on transparent background.
+Series Context: Weather icon set with minimalist design. Clean lines, modern style, consistent 2px stroke weight, rounded line caps, monochrome design (#2D3748) on solid bright green (#00FF00) chroma key background for easy removal.
 
 This Image: Sunny weather - sun with rays
 
@@ -1004,15 +1206,17 @@ API Request:
 Subject: Simple house silhouette with pitched roof and centered door, clean geometric shape
 Composition: Centered in frame, balanced proportions, suitable for small sizes
 Action: Static, stable presentation representing home/safety
-Location: Isolated on transparent background, no environmental context
+Location: Isolated on solid bright green (#00FF00) chroma key background, no environmental context
 Style: Minimalist line art, modern flat design, professional and recognizable
 Lighting: Even lighting, no shadows, clean silhouette optimized for UI
 
 Technical Specifications:
 - Aspect Ratio: 1:1
 - Resolution: 512x512
-- Color: Single color (#2D3748) on transparent background
+- Color: Single color (#2D3748) on bright green (#00FF00) chroma key background
 - Format: Clean vector-style appearance
+
+Note: Use chroma key removal for transparency: convert image.png -fuzz 5% -transparent "#00FF00" output.png
 
 Requirements:
 - Professional and instantly recognizable
@@ -1149,11 +1353,12 @@ Series Overview (applies to all icons):
 - Subject: Weather symbols in minimalist line art style
 - Composition: Centered, balanced, circular-safe design
 - Action: Static, iconic representation
-- Location: Isolated on transparent background
+- Location: Isolated on solid bright green (#00FF00) chroma key background
 - Style: Modern minimalist, clean line art, 2px stroke weight, rounded line caps
 - Lighting: Even, no shadows, optimized for UI usage
 - Color: Monochrome #2D3748
 - Technical: 1:1 aspect ratio, 512x512 resolution
+- Note: Chroma key background allows easy removal with: convert image.png -fuzz 5% -transparent "#00FF00" output.png
 
 [Icon 1 - Sunny]
 API Request using Six-Element Framework:
@@ -1161,11 +1366,11 @@ API Request using Six-Element Framework:
 Subject: Sun symbol - circular center with evenly spaced rays (8 rays radiating outward)
 Composition: Perfectly centered, balanced radial symmetry
 Action: Static, stable representation of sunshine
-Location: Isolated on transparent background, no context
+Location: Isolated on solid bright green (#00FF00) chroma key background, no context
 Style: Minimalist line art, 2px stroke weight, rounded line caps, modern and clean
 Lighting: Even illumination, no shadows, pure line work
 
-Technical: 1:1, 512x512, #2D3748 on transparent
+Technical: 1:1, 512x512, #2D3748 on bright green (#00FF00) chroma key background
 This is icon 1 of 10 in weather icon series - establishing baseline style
 
 References: None (establishing baseline)
@@ -1177,7 +1382,7 @@ API Request:
 Subject: Cloud shape - rounded, fluffy cloud form with smooth curves
 Composition: Centered, following same centered approach as icon 1
 Action: Static cloud representation
-Location: Isolated on transparent, matching icon 1 treatment
+Location: Isolated on bright green (#00FF00) chroma key background, matching icon 1 treatment
 Style: Match icon 1's minimalist line art exactly, same 2px stroke, rounded caps
 Lighting: Even, matching icon 1's treatment
 
@@ -1216,7 +1421,7 @@ API Request:
 Subject: Wind lines showing air movement, curved flowing lines
 Composition: Centered following established pattern
 Action: Suggests movement while remaining iconic
-Location: Isolated on transparent, consistent with series
+Location: Isolated on bright green (#00FF00) chroma key background, consistent with series
 Style: Match established minimalist line art, 2px stroke, rounded caps
 Lighting: Even, no shadows
 
