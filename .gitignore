@@ -24,6 +24,9 @@ response.json
 !assets/generated/*.png
 !assets/generated/*.jpg
 !assets/generated/*.jpeg
+!assets/generated/**/*.png
+!assets/generated/**/*.jpg
+!assets/generated/**/*.jpeg
 
 # Demo and test directories
 agent-skill-demo/
