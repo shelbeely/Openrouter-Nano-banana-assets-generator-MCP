@@ -1,0 +1,81 @@
+{
+  "assets": [
+    {
+      "name": "hero_banner",
+      "prompt": "CRITICAL LOGO REQUIREMENT: First reference image is the EXACT logo - butterfly in circle with sparkle. DO NOT add text to logo. Use this EXACT logo design. Text 'OpenTransition' should be SEPARATE.\n\nCreate hero banner matching OpenTransition website style:\n- Warm orange butterflies (#E68322)\n- Peachy cream gradient backgrounds\n- Organic teardrop shapes\n- Golden yellow sparkles\n- Flat illustration style\n- Logo (butterfly circle) prominently centered\n- Text 'OpenTransition' and 'Track Your Transition Journey' SEPARATE from logo",
+      "aspect_ratio": "16:9",
+      "resolution": "1920x1080",
+      "color_palette": ["#E68322", "#F9B21E", "#FFF8E7", "#F5E8DA"],
+      "reference_images": ["logo_transparent.png", "og-image.png", "section-background.png"]
+    },
+    {
+      "name": "instagram_post",
+      "prompt": "LOGO CONSISTENCY: Use EXACT butterfly circle logo from reference - no modifications. Text separate.\n\nInstagram post with OpenTransition style:\n- Orange/yellow butterflies\n- Peachy background gradients\n- Golden sparkles\n- Organic shapes\n- Logo centered (just butterfly circle)",
+      "aspect_ratio": "1:1",
+      "resolution": "1080x1080",
+      "color_palette": ["#E68322", "#FFF8E7"],
+      "reference_images": ["logo_transparent.png", "og-image.png"]
+    },
+    {
+      "name": "instagram_story",
+      "prompt": "LOGO CONSISTENCY: Exact logo - butterfly circle only.\n\nInstagram story with OpenTransition aesthetics:\n- Vertical format\n- Orange butterflies\n- Peachy warm backgrounds\n- Golden sparkles\n- Logo visible (butterfly circle unchanged)",
+      "aspect_ratio": "9:16",
+      "resolution": "1080x1920",
+      "color_palette": ["#E68322", "#FFF8E7"],
+      "reference_images": ["logo_transparent.png", "og-image.png"]
+    },
+    {
+      "name": "facebook_cover",
+      "prompt": "LOGO CONSISTENCY: Use exact logo from reference.\n\nFacebook cover with OpenTransition style:\n- Wide format\n- Orange/yellow butterflies\n- Peachy backgrounds\n- Logo positioned appropriately (butterfly circle)",
+      "aspect_ratio": "21:9",
+      "color_palette": ["#E68322", "#FFF8E7"],
+      "reference_images": ["logo_transparent.png", "og-image.png"]
+    },
+    {
+      "name": "twitter_header",
+      "prompt": "LOGO CONSISTENCY: Exact butterfly circle logo.\n\nTwitter header with OpenTransition aesthetics:\n- Logo right-of-center\n- Orange butterflies\n- Warm peachy tones",
+      "aspect_ratio": "21:9",
+      "color_palette": ["#E68322", "#FFF8E7"],
+      "reference_images": ["logo_transparent.png", "og-image.png"]
+    },
+    {
+      "name": "linkedin_banner",
+      "prompt": "LOGO CONSISTENCY: Logo stays identical - butterfly circle.\n\nLinkedIn banner professional OpenTransition style:\n- Logo positioned right\n- Subtle orange butterflies\n- Warm professional aesthetic",
+      "aspect_ratio": "21:9",
+      "color_palette": ["#E68322", "#FFF8E7"],
+      "reference_images": ["logo_transparent.png"]
+    },
+    {
+      "name": "profile_picture",
+      "prompt": "LOGO CONSISTENCY: Centered exact logo.\n\nProfile picture:\n- Logo centered (butterfly circle)\n- Peachy warm background\n- Circular-safe design",
+      "aspect_ratio": "1:1",
+      "resolution": "1024x1024",
+      "color_palette": ["#FFF8E7", "#F5E8DA"],
+      "reference_images": ["logo_transparent.png"]
+    },
+    {
+      "name": "app_icon",
+      "prompt": "LOGO CONSISTENCY: Simplified but same logo design.\n\nApp icon:\n- Logo simplified but recognizable (butterfly circle)\n- Warm peachy gradient\n- Clear at small sizes",
+      "aspect_ratio": "1:1",
+      "resolution": "1024x1024",
+      "color_palette": ["#FFF8E7", "#F9B21E"],
+      "reference_images": ["logo_transparent.png"]
+    },
+    {
+      "name": "app_splash_screen",
+      "prompt": "LOGO CONSISTENCY: Exact logo centered.\n\nApp splash screen:\n- Logo centered (butterfly circle)\n- Orange butterflies\n- Peachy flowing shapes\n- Welcoming OpenTransition aesthetic",
+      "aspect_ratio": "9:16",
+      "resolution": "1080x1920",
+      "color_palette": ["#E68322", "#FFF8E7"],
+      "reference_images": ["logo_transparent.png", "og-image.png", "section-background.png"]
+    },
+    {
+      "name": "community_banner",
+      "prompt": "LOGO CONSISTENCY: Logo identical across all assets.\n\nCommunity banner:\n- Logo visible (butterfly circle)\n- Multiple orange butterflies\n- Connecting elements\n- Rich OpenTransition style\n- Peachy warm backgrounds",
+      "aspect_ratio": "16:9",
+      "resolution": "1920x1080",
+      "color_palette": ["#E68322", "#FFF8E7", "#F9B21E"],
+      "reference_images": ["logo_transparent.png", "og-image.png", "section-background.png"]
+    }
+  ]
+}
