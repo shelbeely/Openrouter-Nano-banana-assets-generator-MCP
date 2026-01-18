@@ -28,3 +28,4 @@ response.json
 # Demo and test directories
 agent-skill-demo/
 test-output/
+generated-assets-test/
